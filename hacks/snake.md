@@ -78,9 +78,9 @@ permalink: /snake/
                 <label for="speed1">Easy</label>
                 <input id="speed2" type="radio" name="speed" value="175"/>
                 <label for="speed2">Normal</label>
-                <input id="speed3" type="radio" name="speed" value="125"/>
+                <input id="speed3" type="radio" name="speed" value="150"/>
                 <label for="speed3">Hard</label>
-                <input id="speed4" type="radio" name="speed" value="100"/>
+                <input id="speed4" type="radio" name="speed" value="50"/>
                 <label for="speed3">Impossible</label>
             </p>
             <p>Wall:

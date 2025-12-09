@@ -74,13 +74,13 @@ permalink: /snake/
             <a id="new_game2" class="link-alert">new game</a>
             <br>
             <p>Speed:
-                <input id="speed1" type="radio" name="speed" value="100" checked/>
+                <input id="speed1" type="radio" name="speed" value="200" checked/>
                 <label for="speed1">Easy</label>
-                <input id="speed2" type="radio" name="speed" value="75"/>
+                <input id="speed2" type="radio" name="speed" value="150"/>
                 <label for="speed2">Normal</label>
-                <input id="speed3" type="radio" name="speed" value="25"/>
+                <input id="speed3" type="radio" name="speed" value="100"/>
                 <label for="speed3">Hard</label>
-                <input id="speed4" type="radio" name="speed" value="10"/>
+                <input id="speed4" type="radio" name="speed" value="50"/>
                 <label for="speed3">Impossible</label>
             </p>
             <p>Wall:
@@ -138,7 +138,7 @@ permalink: /snake/
         button_new_game.onclick = button_new_game1.onclick = button_new_game2.onclick = newGame;
         button_setting_menu.onclick = button_setting_menu1.onclick = ()=>showScreen(SCREEN_SETTING);
 
-        setSnakeSpeed(150);
+        setSnakeSpeed(200);
         for(let i=0;i<speed_setting.length;i++){
             speed_setting[i].addEventListener("click", function(){
                 for(let j=0;j<speed_setting.length;j++){

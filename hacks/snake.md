@@ -53,6 +53,7 @@ permalink: /snake/
 <h2>Snake</h2>
 <div class="container">
     <p class="fs-4">Score: <span id="score_value">0</span></p>
+    <p class="fs-4">High Score: <span id="high_score_value">0</span></p>    
 
     <div class="container bg-secondary" style="text-align:center;">
         <div id="menu" class="py-4 text-light">
@@ -80,8 +81,6 @@ permalink: /snake/
                 <label for="speed2">Normal</label>
                 <input id="speed3" type="radio" name="speed" value="125"/>
                 <label for="speed3">Hard</label>
-                <input id="speed4" type="radio" name="speed" value="100"/>
-                <label for="speed3">Impossible</label>
             </p>
             <p>Wall:
                 <input id="wallon" type="radio" name="wall" value="1" checked/>
@@ -101,6 +100,9 @@ permalink: /snake/
     const SCREEN_SNAKE = 0;
     const screen_snake = canvas;
     const ele_score = document.getElementById("score_value");
+    const ele_high_score = document.getElementById("high_score_value");
+    let high_score = Number(localStorage.getItem("snake_high_score")) || 0;
+    ele_high_score.innerHTML = high_score;
     const speed_setting = document.getElementsByName("speed");
     const wall_setting = document.getElementsByName("wall");
 
@@ -213,6 +215,7 @@ permalink: /snake/
 
         if(wall===1){
             if(snake[0].x<0 || snake[0].x===canvas.width/BLOCK || snake[0].y<0 || snake[0].y===canvas.height/BLOCK){
+                altScore(score);
                 showScreen(SCREEN_GAME_OVER);
                 return;
             }
@@ -307,7 +310,14 @@ permalink: /snake/
     }
 
     let checkBlock = function(x,y,_x,_y){ return x===_x && y===_y; }
-    let altScore = function(val){ ele_score.innerHTML=String(val); }
+    let altScore = function(val){ 
+        ele_score.innerHTML = String(val); 
+        if (val > high_score) {
+            high_score = val;
+            localStorage.setItem("snake_high_score", high_score);
+            ele_high_score.innerHTML = String(high_score);
+        }
+    };
     let setSnakeSpeed=function(val){ snake_speed=val; }
     let setWall=function(val){
         wall=val;

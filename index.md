@@ -43,6 +43,11 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
             Turtle
         </div>
     </a>
+    <a href="{{site.baseurl}}/tictactoe" style="text-decoration: none;">
+        <div style="background-color: #e70909ff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+            Tic Tac Toe
+        </div>
+    </a>
 </div>
 
 <br>

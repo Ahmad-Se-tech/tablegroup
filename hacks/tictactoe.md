@@ -13,4 +13,10 @@ permalink: /tictactoe/
     button { margin-top: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
 </style>
 
+<h2>Tic Tac Toe</h2>
+<div class="container">
+    <div id="board"></div>
+    <div id="status">Click a cell to start!</div>
+    <button id="restart">Restart Game</button>
+</div>
 

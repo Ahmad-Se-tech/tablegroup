@@ -59,7 +59,14 @@ class TicTacToe {
     constructor() {
         this.board = Array(9).fill("");
         this.currentPlayer = "X";
-        this.gameOver = false;
+        this.gameOver = false; 
+        
+        this.boardElement = document.getElementById("board");
+        this.statusElement = document.getElementById("status");
+        this.restartButton = document.getElementById("restart");
+                this.cells = [];
+
+
 
 
 

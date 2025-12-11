@@ -27,6 +27,8 @@ permalink: /background
     startGameWorld();
   };
 
+
+Test
   function startGameWorld() {
     if (imagesLoaded < 2) return;
 

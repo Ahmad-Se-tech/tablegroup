@@ -43,10 +43,19 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
             Turtle
         </div>
     </a>
-    
-    <a href="{{site.baseurl}}/connect4" style="text-decoration: none;">
+     <a href="{{site.baseurl}}/connect4" style="text-decoration: none;">
         <div style="background-color: #ccff00ff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
             Connect 4
+        </div>
+    </a>
+    <a href="{{site.baseurl}}/tictactoe" style="text-decoration: none;">
+        <div style="background-color: #e70909ff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+            Tic Tac Toe
+            </div>
+    </a>
+    <a href="{{site.baseurl}}/breakout" style="text-decoration: none;">
+        <div style="background-color: #3e6cbdff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+            Breakout
         </div>
     </a>
 </div>

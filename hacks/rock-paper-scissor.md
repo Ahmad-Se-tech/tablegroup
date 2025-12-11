@@ -30,7 +30,7 @@ permalink: /rock-paper-scissor/
     overflow-y: auto;      /* added */
     font-family: 'Press Start 2P', cursive;
     border: 3px solid purple;
-    box-shadow: 0 0 20px rgba(128, 0, 128, 0.5);
+    box-shadow: 0 0 20px rgba(65, 4, 65, 1);
     text-align: center;
     `;
 

@@ -6,7 +6,7 @@ permalink: /breakout/
 
 <style>
   canvas {
-    background: #eee;
+    background: #000000ff;
     display: block;
     margin: 0 auto;
     border: 1px solid #333;
@@ -289,7 +289,7 @@ permalink: /breakout/
   function drawBall() {
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#de0000ff";
     ctx.fill();
     ctx.closePath();
   }
@@ -297,7 +297,7 @@ permalink: /breakout/
   function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#de0000ff";
     ctx.fill();
     ctx.closePath();
   }
@@ -316,11 +316,11 @@ permalink: /breakout/
 
           if (bricks[c][r].powerUp) {
             // Make powerup bricks glow yellow
-            ctx.fillStyle = "gold";
-            ctx.shadowColor = "orange";
+            ctx.fillStyle = "#0095DD";
+            ctx.shadowColor = "#6ecfffff";
             ctx.shadowBlur = 10;
           } else {
-            ctx.fillStyle = "#0095DD";
+            ctx.fillStyle = "#de0000ff";
             ctx.shadowBlur = 0;
           }
 

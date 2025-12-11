@@ -54,4 +54,12 @@ permalink: /tictactoe/
     <button id="restart">Restart Game</button>
 </div>
 
+<script>
+class TicTacToe {
+    constructor() {
+        this.board = Array(9).fill("");
+        this.currentPlayer = "X";
+        this.gameOver = false;
+
+
 

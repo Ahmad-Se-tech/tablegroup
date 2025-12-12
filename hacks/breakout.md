@@ -37,6 +37,12 @@ permalink: /breakout/
   Next Level ▶
 </button>
 
+<!-- NEW: Win message -->
+<div id="winMessage" style="display:none; text-align:center; margin-top:20px; font-family:system-ui,Arial;">
+  <h2> you win yay </h2>
+</div>
+
+
 <!-- Hack/info sections here (unchanged) -->
 
 <script>
@@ -113,8 +119,11 @@ document.addEventListener("keyup", keyUpHandler);
 document.addEventListener("mousemove", mouseMoveHandler);
 
 function keyDownHandler(e) {
-  if (e.key === "Right" || e.key === "ArrowRight") rightPressed = true;
-  else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = true;
+  if (e.key === "Right" || e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
+    rightPressed = true;
+  } else if (e.key === "Left" || e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
+    leftPressed = true;
+  }
   
   // --- Slow motion toggle ---
   if (e.key === "s" || e.key === "S") {
@@ -130,8 +139,11 @@ function keyDownHandler(e) {
 }
 
 function keyUpHandler(e) {
-  if (e.key === "Right" || e.key === "ArrowRight") rightPressed = false;
-  else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = false;
+  if (e.key === "Right" || e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
+    rightPressed = false;
+  } else if (e.key === "Left" || e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
+    leftPressed = false;
+  }
 }
 
 function mouseMoveHandler(e) {
@@ -156,8 +168,8 @@ function collisionDetection() {
           dy = -dy;
 
           // --- Hack #2: Increase speed ---
-          dx *= 1.05;
-          dy *= 1.05;
+          dx *= 1.005;
+          dy *= 1.005;
 
           b.status = 0;
           score++;
@@ -319,21 +331,31 @@ function nextLevel() {
 
   paused = false;
   nextLevelBtn.style.display = "none";
-  requestAnimationFrame(draw);
+  draw();
 }
 
 nextLevelBtn.addEventListener("click", nextLevel);
 
 function drawScore() {
+  ctx.save();
+  ctx.shadowBlur = 0;
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD";
-  ctx.fillText("Score: " + score, 8, 20);
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  ctx.fillText("Score: " + score, 10, 10);
+  ctx.restore();
 }
 
 function drawLives() {
+  ctx.save();
+  ctx.shadowBlur = 0;
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD";
-  ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
+  ctx.textAlign = "right";
+  ctx.textBaseline = "top";
+  ctx.fillText("Lives: " + lives, canvas.width - 10, 10);
+  ctx.restore();
 }
 
 function draw() {
@@ -349,7 +371,8 @@ function draw() {
 
   if (!paused && remainingBricks() === 0) {
     paused = true;
-    nextLevelBtn.style.display = "block";
+    // --- Show You Win message immediately ---
+    document.getElementById("winMessage").style.display = "block";
     return;
   }
 
@@ -358,11 +381,8 @@ function draw() {
   else if (y + dy > canvas.height - ballRadius) {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
-
-      // --- Hack #2: Increase speed on paddle ---
-      dx *= 1.05;
-      dy *= 1.05;
-
+      dx *= 1.025;
+      dy *= 1.025;
     } else {
       lives--;
       if (!lives) {
@@ -390,12 +410,21 @@ function draw() {
 // Start the game
 draw();
 
-// --- Color Picker Event Listeners ---
-window.addEventListener("DOMContentLoaded", () => {
-  const ballPicker = document.getElementById("ballColorPicker");
-  const brickPicker = document.getElementById("brickColorPicker");
-
-  ballPicker.addEventListener("input", (e) => ballColor = e.target.value);
-  brickPicker.addEventListener("input", (e) => brickColor = e.target.value);
+// Reset button logic
+document.getElementById("resetBtn").addEventListener("click", () => {
+  score = 0;
+  lives = 999;
+  paused = false;
+  document.getElementById("winMessage").style.display = "none";
+  initBricks();
+  resetBallAndPaddle();
+  draw();
 });
-</script>
+
+// --- Color Picker Event Listeners ---
+const ballPicker = document.getElementById("ballColorPicker");
+const brickPicker = document.getElementById("brickColorPicker");
+
+ballPicker.addEventListener("input", (e) => ballColor = e.target.value);
+brickPicker.addEventListener("input", (e) => brickColor = e.target.value);
+

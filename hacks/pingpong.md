@@ -53,7 +53,22 @@ comments: True
 // -----------------------------
 const Config = {
   canvas: { width: 800, height: 500 },
-  paddle: { width: 10, height: 100, speed: 7 },
+  paddle: {
+    // New property for the image path. This is where site.baseurl would be used 
+    // to construct the full path to your image file (e.g., "/assets/paddle.png").
+    imagePath: "/assets/paddle.png", 
+    
+    // The width and height now define how large to draw the image on the screen.
+    // They are still necessary for rendering and collision detection.
+    width: 20, 
+    height: 120, 
+    
+    // The speed variable stays exactly where it is, as it defines movement, 
+    // which is independent of the appearance (image or shape).
+    speed: 7 
+  },
+  // ... rest of config
+};
   ball: { radius: 10, baseSpeedX: 5, maxRandomY: 2, spinFactor: 0.3 },
   rules: { winningScore: 10 },
   keys: {

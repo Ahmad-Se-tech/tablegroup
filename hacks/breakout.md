@@ -90,7 +90,7 @@ let brickColor = "#de0000";
 
 // Score and Lives
 let score = 0;
-let lives = 999;
+let lives = 5;
 
 // Blocks
 let brickRowCount = 4;
@@ -231,7 +231,7 @@ function drawPowerUps() {
       ctx.font = "bold 14px Arial";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("P", p.x, p.y);
+      ctx.fillText(":)", p.x, p.y);
 
       p.y += powerUpFallSpeed;
 
@@ -417,8 +417,8 @@ function draw() {
   else if (y + dy > canvas.height - ballRadius) {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
-      dx *= 1.025;
-      dy *= 1.025;
+      dx *= 1.01;
+      dy *= 1.01;
     } else {
       lives--;
       if (!lives) {
@@ -451,7 +451,7 @@ const resetBtn = document.getElementById("resetBtn");
 if (resetBtn) {
   resetBtn.addEventListener("click", () => {
     score = 0;
-    lives = 999;
+    lives = 10;
     paused = false;
     document.getElementById("winMessage").style.display = "none";
     initBricks();

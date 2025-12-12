@@ -54,8 +54,6 @@ comments: True
 const Config = {
   canvas: { width: 800, height: 500 },
   paddle: { imagePath: "/images/pingpong/happymort.png", width: 20, height: 120, speed:7},
-  // ... rest of config
-};
   ball: { radius: 10, baseSpeedX: 5, maxRandomY: 2, spinFactor: 0.3 },
   rules: { winningScore: 10 },
   keys: {

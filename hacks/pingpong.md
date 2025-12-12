@@ -55,7 +55,7 @@ const Config = {
   canvas: { width: 800, height: 500 },
   paddle: {
     // New part that defines the image path for the file that will replace the normal rectangle.
-    imagePath: "/assets/paddle.png", 
+    imagePath: "/images/pingpong/happymort.png", 
     
     // Defines the resolution of the image for the paddle. This still needs to be there as the size needs to be defined so 
     // the game knows exactly where the ball will collide with the paddles.

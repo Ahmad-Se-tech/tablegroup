@@ -7,7 +7,7 @@ comments: true
 
 ## As a conversation Starter
 
-Here are some places I have lived. Adding this as a test commit0.2
+Here are some places I have lived.
 
 <comment>
 Flags are made using Wikipedia images

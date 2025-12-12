@@ -54,17 +54,16 @@ comments: True
 const Config = {
   canvas: { width: 800, height: 500 },
   paddle: {
-    // New property for the image path. This is where site.baseurl would be used 
-    // to construct the full path to your image file (e.g., "/assets/paddle.png").
+    // New part that defines the image path for the file that will replace the normal rectangle.
     imagePath: "/assets/paddle.png", 
     
-    // The width and height now define how large to draw the image on the screen.
-    // They are still necessary for rendering and collision detection.
+    // Defines the resolution of the image for the paddle. This still needs to be there as the size needs to be defined so 
+    // the game knows exactly where the ball will collide with the paddles.
     width: 20, 
     height: 120, 
     
-    // The speed variable stays exactly where it is, as it defines movement, 
-    // which is independent of the appearance (image or shape).
+    // Defines the speed in pixels for frame. Basically, for each frame refreshed, the paddle will move up or down 7 pixels
+    // with a keypress.
     speed: 7 
   },
   // ... rest of config

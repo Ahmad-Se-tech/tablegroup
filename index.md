@@ -58,6 +58,11 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
             Breakout
         </div>
     </a>
+    <a href="{{site.baseurl}}/rock-paper-scissor" style="text-decoration: none;">
+        <div style="background-color: #8e3ebdff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+            Breakout
+        </div>
+    </a>
 </div>
 
 <br>

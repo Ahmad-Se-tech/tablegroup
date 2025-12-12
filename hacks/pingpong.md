@@ -53,19 +53,7 @@ comments: True
 // -----------------------------
 const Config = {
   canvas: { width: 800, height: 500 },
-  paddle: {
-    // New part that defines the image path for the file that will replace the normal rectangle.
-    imagePath: "/images/pingpong/happymort.png", 
-    
-    // Defines the resolution of the image for the paddle. This still needs to be there as the size needs to be defined so 
-    // the game knows exactly where the ball will collide with the paddles.
-    width: 20, 
-    height: 120, 
-    
-    // Defines the speed in pixels for frame. Basically, for each frame refreshed, the paddle will move up or down 7 pixels
-    // with a keypress.
-    speed: 7 
-  },
+  paddle: { imagePath: "/images/pingpong/happymort.png", width: 20, height: 120, speed:7},
   // ... rest of config
 };
   ball: { radius: 10, baseSpeedX: 5, maxRandomY: 2, spinFactor: 0.3 },

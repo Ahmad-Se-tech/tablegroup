@@ -52,10 +52,10 @@ comments: True
 // Config: Tweak these values
 // -----------------------------
 const Config = {
-  canvas: { width: 800, height: 500 },
+  canvas: { width: 800, height: 500 }
   paddle: { imagePath: "/images/pingpong/happymort.png", width: 20, height: 120, speed:7},
-  ball: { radius: 10, baseSpeedX: 5, maxRandomY: 2, spinFactor: 0.3 },
-  rules: { winningScore: 10 },
+  ball: { radius: 10, baseSpeedX: 5, maxRandomY: 2, spinFactor: 0.3 }
+  rules: { winningScore: 10 }
   keys: {
     // TODO[Students]: Remap keys if desired
     p1Up: "w", p1Down: "s",

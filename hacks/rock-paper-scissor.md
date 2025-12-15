@@ -16,7 +16,7 @@ permalink: /rock-paper-scissor/
 
 <script type="module">
   // --- UI (purple box) ---
-   const instructionsStyle = `
+    const instructionsStyle = `
   position: relative;
   margin: 64px auto 48px auto;
   background: #f8fafc;
@@ -34,15 +34,9 @@ permalink: /rock-paper-scissor/
   text-align: center;
 `;
 
+
   const instructionsHTML = `
-    <h2 style="
-  color: #010718ff;
-  margin-bottom: 12px;
-  font-weight: 600;
-  letter-spacing: 0.4px;
-">
-  Rock • Paper • Scissors
-</h2>
+    <h2 style="color: black; margin-bottom: 20px;">Rock Paper Scissors SHOOT!</h2>
     <div style="margin-bottom: 20px;">
       <p>Play the game from your browser console!</p>
       <p>Type <code>playRPS("rock")</code>, <code>playRPS("paper")</code>, or <code>playRPS("scissors")</code></p>

@@ -19,7 +19,7 @@ permalink: /rock-paper-scissor/
     const instructionsStyle = `
   position: relative;
   margin: 64px auto 48px auto;
-  background: #f8fafc;
+  background: {{site.baseurl}}/images/rps/paper.png;
   color: #1f2937;
   padding: 32px;
   border-radius: 12px;

@@ -16,23 +16,23 @@ permalink: /rock-paper-scissor/
 
 <script type="module">
   // --- UI (purple box) ---
-    const instructionsStyle = `
+   const instructionsStyle = `
   position: relative;
   margin: 64px auto 48px auto;
-    background: linear-gradient(135deg, black, purple);
-    color: white;
-    padding: 30px;
-    border-radius: 15px;
-    z-index: 1000;
-    max-width: 600px;
-    width: 90%;
-    max-height: 80vh;      /* added */
-    overflow-y: auto;      /* added */
-    font-family: 'Press Start 2P', cursive;
-    border: 3px solid purple;
-    box-shadow: 0 0 20px rgba(65, 4, 65, 1);
-    text-align: center;
-    `;
+  background: #f8fafc;
+  color: #1f2937;
+  padding: 32px;
+  border-radius: 12px;
+  z-index: 1000;
+  max-width: 640px;
+  width: 95%;
+  max-height: 80vh;
+  overflow-y: auto;
+  font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  text-align: center;
+`;
 
   const instructionsHTML = `
     <h2 style="color: purple; margin-bottom: 20px;">Rock Paper Scissors SHOOT!</h2>

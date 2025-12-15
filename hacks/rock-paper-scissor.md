@@ -29,14 +29,14 @@ permalink: /rock-paper-scissor/
   max-height: 80vh;
   overflow-y: auto;
   font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
-  border: 1px solid #0a0a0aff;
-  box-shadowtest: 0 10px 25px rgba(0,0,0,0.08);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
   text-align: center;
 `;
 
 
   const instructionsHTML = `
-    <h2 style="color: black; margin-bottom: 20px;">Rock Paper Scissors </h2>
+    <h2 style="color: 000# ; margin-bottom: 20px;">Rock Paper Scissors </h2>
     <div style="margin-bottom: 20px;">
       <p>Play the game from your browser console!</p>
       <p>Type <code>playRPS("rock")</code>, <code>playRPS("paper")</code>, or <code>playRPS("scissors")</code></p>

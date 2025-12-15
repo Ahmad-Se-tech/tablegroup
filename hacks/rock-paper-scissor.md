@@ -35,7 +35,14 @@ permalink: /rock-paper-scissor/
 `;
 
   const instructionsHTML = `
-    <h2 style="color: purple; margin-bottom: 20px;">Rock Paper Scissors SHOOT!</h2>
+    <h2 style="
+  color:#1e40af;
+  margin-bottom:12px;
+  font-weight:600;
+  letter-spacing:0.4px;
+">
+  Rock • Paper • Scissors
+</h2>
     <div style="margin-bottom: 20px;">
       <p>Play the game from your browser console!</p>
       <p>Type <code>playRPS("rock")</code>, <code>playRPS("paper")</code>, or <code>playRPS("scissors")</code></p>

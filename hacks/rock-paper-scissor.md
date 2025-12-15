@@ -36,7 +36,7 @@ permalink: /rock-paper-scissor/
 
   const instructionsHTML = `
     <h2 style="
-  color:#1e40af;
+  color: #010718ff;
   margin-bottom:12px;
   font-weight:600;
   letter-spacing:0.4px;

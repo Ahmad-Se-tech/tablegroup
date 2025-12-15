@@ -29,8 +29,8 @@ permalink: /rock-paper-scissor/
   max-height: 80vh;
   overflow-y: auto;
   font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  border: 1px solid #0a0a0aff;
+  box-shadowtest: 0 10px 25px rgba(0,0,0,0.08);
   text-align: center;
 `;
 

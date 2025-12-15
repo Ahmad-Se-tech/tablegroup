@@ -17,11 +17,24 @@ permalink: /breakout/
   p {
     margin-bottom: 5px !important;
   }
+  .controls {
+    max-width:600px;
+    margin:15px auto;
+    font-family:system-ui,Arial;
+  }
+  #resetBtn {
+    display:block;
+    margin:10px auto;
+    padding:8px 12px;
+    font-family:system-ui,Arial;
+    cursor:pointer;
+    border-radius:6px;
+  }
 </style>
 
 <canvas id="gameCanvas" width="600" height="400"></canvas>
 
-<div style="max-width:600px;margin:15px auto;font-family:system-ui,Arial;">
+<div class="controls">
   <h3>🎨 Live Color Controls</h3>
 
   <label><strong>Ball Color:</strong></label>
@@ -30,6 +43,10 @@ permalink: /breakout/
 
   <label><strong>Brick Color:</strong></label>
   <input type="color" id="brickColorPicker" value="#de0000" style="margin-left:10px;">
+  <br><br>
+
+  <!-- optional reset button (was missing in your original) -->
+  <button id="resetBtn">Reset Game</button>
 </div>
 
 <!-- NEW: Next Level buttons -->
@@ -41,9 +58,6 @@ permalink: /breakout/
 <div id="winMessage" style="display:none; text-align:center; margin-top:20px; font-family:system-ui,Arial;">
   <h2> you win yay </h2>
 </div>
-
-
-<!-- Hack/info sections here (unchanged) -->
 
 <script>
 const canvas = document.getElementById("gameCanvas");
@@ -76,7 +90,7 @@ let brickColor = "#de0000";
 
 // Score and Lives
 let score = 0;
-let lives = 999;
+let lives = 5;
 
 // Blocks
 let brickRowCount = 4;
@@ -147,7 +161,9 @@ function keyUpHandler(e) {
 }
 
 function mouseMoveHandler(e) {
-  let relativeX = e.clientX - canvas.offsetLeft;
+  // account for page scrolling and canvas offset
+  const rect = canvas.getBoundingClientRect();
+  let relativeX = e.clientX - rect.left;
   if (relativeX > 0 && relativeX < canvas.width) {
     paddleX = relativeX - paddleWidth / 2;
   }
@@ -165,11 +181,13 @@ function collisionDetection() {
           y > b.y &&
           y < b.y + brickHeight
         ) {
+          // reverse vertical direction
           dy = -dy;
 
-          // --- Hack #2: Increase speed ---
-          dx *= 1.005;
-          dy *= 1.005;
+          // increase speed slightly (apply after reversing)
+          const speedIncrease = 1.05;
+          dx *= speedIncrease;
+          dy *= speedIncrease;
 
           b.status = 0;
           score++;
@@ -213,7 +231,7 @@ function drawPowerUps() {
       ctx.font = "bold 14px Arial";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("P", p.x, p.y);
+      ctx.fillText(":)", p.x, p.y);
 
       p.y += powerUpFallSpeed;
 
@@ -241,6 +259,8 @@ function drawPowerUpTimer() {
     let barWidth = 10;
     let fillHeight = (remaining / powerUpDuration) * barHeight;
 
+    ctx.save();
+    ctx.shadowBlur = 0;
     ctx.fillStyle = "gray";
     ctx.fillRect(canvas.width - 20, 20, barWidth, barHeight);
 
@@ -249,6 +269,7 @@ function drawPowerUpTimer() {
 
     ctx.strokeStyle = "black";
     ctx.strokeRect(canvas.width - 20, 20, barWidth, barHeight);
+    ctx.restore();
 
     if (remaining <= 0) {
       activePowerUp = null;
@@ -259,19 +280,27 @@ function drawPowerUpTimer() {
 
 // Draw functions
 function drawBall() {
+  ctx.save();
+  ctx.shadowBlur = 0;
+  ctx.shadowColor = "transparent";
   ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
   ctx.fillStyle = ballColor;
   ctx.fill();
   ctx.closePath();
+  ctx.restore();
 }
 
 function drawPaddle() {
+  ctx.save();
+  ctx.shadowBlur = 0;
+  // keep paddle color distinct from ball (hard-coded or changeable if you want)
+  ctx.fillStyle = "#de0000";
   ctx.beginPath();
   ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = "#de0000ff";
   ctx.fill();
   ctx.closePath();
+  ctx.restore();
 }
 
 function drawBricks() {
@@ -283,27 +312,33 @@ function drawBricks() {
         bricks[c][r].x = brickX;
         bricks[c][r].y = brickY;
 
+        // isolate drawing state per brick so shadows/colors do not leak
+        ctx.save();
         ctx.beginPath();
         ctx.rect(brickX, brickY, brickWidth, brickHeight);
 
         if (bricks[c][r].powerUp) {
-          ctx.fillStyle = "#0095DD";
-          ctx.shadowColor = "#6ecfffff";
-          ctx.shadowBlur = 10;
+            // power-up bricks remain blue and glow
+            ctx.fillStyle = "#0095DD";
+            ctx.shadowColor = "#6ecfffff";
+            ctx.shadowBlur = 10;
         } else {
-          ctx.fillStyle = brickColor;
-          ctx.shadowBlur = 0;
+            // normal bricks use the user-picked color and no shadow
+            ctx.fillStyle = brickColor;
+            ctx.shadowBlur = 0;
+            ctx.shadowColor = "transparent";
         }
 
         ctx.fill();
         ctx.closePath();
+        ctx.restore();
       }
     }
   }
 }
 
 function resetBallAndPaddle() {
-  const speed = Math.hypot(dx, dy);
+  const speed = Math.hypot(dx, dy) || 5;
   x = canvas.width / 2;
   y = canvas.height - 30;
   const angle = (Math.PI / 6) + Math.random() * (Math.PI / 3);
@@ -371,8 +406,9 @@ function draw() {
 
   if (!paused && remainingBricks() === 0) {
     paused = true;
-    // --- Show You Win message immediately ---
     document.getElementById("winMessage").style.display = "block";
+    // show next level button optionally
+    nextLevelBtn.style.display = "block";
     return;
   }
 
@@ -381,8 +417,8 @@ function draw() {
   else if (y + dy > canvas.height - ballRadius) {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
-      dx *= 1.025;
-      dy *= 1.025;
+      dx *= 1.01;
+      dy *= 1.01;
     } else {
       lives--;
       if (!lives) {
@@ -410,21 +446,36 @@ function draw() {
 // Start the game
 draw();
 
-// Reset button logic
-document.getElementById("resetBtn").addEventListener("click", () => {
-  score = 0;
-  lives = 999;
-  paused = false;
-  document.getElementById("winMessage").style.display = "none";
-  initBricks();
-  resetBallAndPaddle();
-  draw();
-});
+// Reset button logic — guard in case it's missing
+const resetBtn = document.getElementById("resetBtn");
+if (resetBtn) {
+  resetBtn.addEventListener("click", () => {
+    score = 0;
+    lives = 10;
+    paused = false;
+    document.getElementById("winMessage").style.display = "none";
+    initBricks();
+    resetBallAndPaddle();
+    draw();
+  });
+}
 
 // --- Color Picker Event Listeners ---
 const ballPicker = document.getElementById("ballColorPicker");
 const brickPicker = document.getElementById("brickColorPicker");
 
-ballPicker.addEventListener("input", (e) => ballColor = e.target.value);
-brickPicker.addEventListener("input", (e) => brickColor = e.target.value);
-
+if (ballPicker) {
+  ballPicker.addEventListener("input", (e) => {
+    ballColor = e.target.value;
+    // redraw once immediately so the change is visible right away
+    // (not strictly necessary because animation is running, but harmless)
+    // draw();
+  });
+}
+if (brickPicker) {
+  brickPicker.addEventListener("input", (e) => {
+    brickColor = e.target.value;
+    // draw();
+  });
+}
+</script>

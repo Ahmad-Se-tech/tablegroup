@@ -53,21 +53,7 @@ comments: True
 // -----------------------------
 const Config = {
   canvas: { width: 800, height: 500 },
-  paddle: {
-    // New part that defines the image path for the file that will replace the normal rectangle.
-    imagePath: "/assets/paddle.png", 
-    
-    // Defines the resolution of the image for the paddle. This still needs to be there as the size needs to be defined so 
-    // the game knows exactly where the ball will collide with the paddles.
-    width: 20, 
-    height: 120, 
-    
-    // Defines the speed in pixels for frame. Basically, for each frame refreshed, the paddle will move up or down 7 pixels
-    // with a keypress.
-    speed: 7 
-  },
-  // ... rest of config
-};
+  paddle: { imagePath: "/images/pingpong/happymort.png", width: 20, height: 120, speed:7},
   ball: { radius: 10, baseSpeedX: 5, maxRandomY: 2, spinFactor: 0.3 },
   rules: { winningScore: 10 },
   keys: {
@@ -170,7 +156,7 @@ class Game {
     this.input = new Input();
 
     // Entities
-    const { width, height, speed } = Config.paddle;
+    const { imagePath, width, height, speed } = Config.paddle;
     this.paddleLeft = new Paddle(0, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height);
     this.paddleRight = new Paddle(Config.canvas.width - width, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height);
     this.ball = new Ball(Config.ball.radius, Config.canvas.width, Config.canvas.height);

@@ -151,11 +151,11 @@ permalink: /rock-paper-scissor/
   bgImage.src = '{{site.baseurl}}/images/platformer/backgrounds/alien_planet1.jpg';
 
   const rockImg = new Image();
-  rockImg.src = '{{site.baseurl}}/images/rps/rock.jpg';
+  rockImg.src = '{{site.baseurl}}/images/rps/rock.png';
   const paperImg = new Image();
-  paperImg.src = '{{site.baseurl}}/images/rps/paper.jpeg';
+  paperImg.src = '{{site.baseurl}}/images/rps/paper.png';
   const scissorsImg = new Image();
-  scissorsImg.src = '{{site.baseurl}}/images/rps/scissors.jpeg';
+  scissorsImg.src = '{{site.baseurl}}/images/rps/scissors.png';
 
   const bg = new BattleBackground(bgImage, battleCanvas.width, battleCanvas.height, 0.12);
 

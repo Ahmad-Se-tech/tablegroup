@@ -67,6 +67,7 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
         <div style="background-color: #FF1493; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
             Ping Pong
         </div> 
+    </a>
 </div>
 
 <br>

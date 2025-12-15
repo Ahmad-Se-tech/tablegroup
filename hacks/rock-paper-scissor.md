@@ -36,22 +36,22 @@ permalink: /rock-paper-scissor/
 
 
   const instructionsHTML = `
-    <h2 style="color: black; margin-bottom: 20px;">Rock Paper Scissors SHOOT!</h2>
+    <h2 style="color: black; margin-bottom: 20px;">Rock Paper Scissors </h2>
     <div style="margin-bottom: 20px;">
       <p>Play the game from your browser console!</p>
       <p>Type <code>playRPS("rock")</code>, <code>playRPS("paper")</code>, or <code>playRPS("scissors")</code></p>
     </div>
     <div id="images" style="display:flex; justify-content:center; gap:20px; margin-bottom:14px;">
       <button id="rock-btn" style="background:none; border:none; padding:0; cursor:pointer;">
-        <img id="rock-img" src="{{site.baseurl}}/images/rps/rock.jpg"
+        <img id="rock-img" src="{{site.baseurl}}/images/rps/rock.png"
              style="width:100px; border:2px solid white; border-radius:10px;">
       </button>
       <button id="paper-btn" style="background:none; border:none; padding:0; cursor:pointer;">
-        <img id="paper-img" src="{{site.baseurl}}/images/rps/paper.jpeg"
+        <img id="paper-img" src="{{site.baseurl}}/images/rps/paper.png"
              style="width:100px; border:2px solid white; border-radius:10px;">
       </button>
       <button id="scissors-btn" style="background:none; border:none; padding:0; cursor:pointer;">
-        <img id="scissors-img" src="{{site.baseurl}}/images/rps/scissors.jpeg"
+        <img id="scissors-img" src="{{site.baseurl}}/images/rps/scissors.png"
              style="width:100px; border:2px solid white; border-radius:10px;">
       </button>
     </div>

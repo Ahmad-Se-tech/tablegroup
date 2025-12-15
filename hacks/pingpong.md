@@ -70,12 +70,13 @@ class Vector2 {
 }
 
 class Paddle {
-  constructor(x, y, width, height, speed, boundsHeight) {
+  constructor(x, y, width, height, speed, boundsHeight, imagePath) {
     this.position = new Vector2(x, y);
     this.width = width;
     this.height = height;
     this.speed = speed;
     this.boundsHeight = boundsHeight;
+    this.imagePath = imagePath
   }
   move(dy) {
     this.position.y = Math.min(

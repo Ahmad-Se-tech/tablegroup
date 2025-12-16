@@ -59,7 +59,7 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
   </a>
 
   <a href="/tablegroup/custompong" style="text-decoration: none;">
-    <div style="background-color: #28300aff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
+    <div style="background-color: #302a0aff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
          onmouseover="this.style.backgroundColor='#4255a8ff';" 
          onmouseout="this.style.backgroundColor='#4255a8';">
         Pong

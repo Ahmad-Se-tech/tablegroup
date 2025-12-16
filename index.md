@@ -45,15 +45,16 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
             Connect 4
         </div>   
     </a>
-    <a href="{{site.baseurl}}/breakout" style="text-decoration: none;">
+    <a href="{{site.baseurl}}/cookie-clicker" style="text-decoration: none;">
         <div style="background-color: #3e6cbdff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
-            Breakout
-        </div>
-    </a>
-     <a href="{{site.baseurl}}/cookie-clicker" style="text-decoration: none;">
-        <div style="background-color: #28300aff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
             Cookie Clicker
-        </div> 
+        </div></a>
+     <a href="{{site.baseurl}}/breakout" style="text-decoration: none;">
+        <div style="background-color: #b4ce4bff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+            Break Out
+        </div>   
+    </a>
+   
 </div>
 
 <br>

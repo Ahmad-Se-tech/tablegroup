@@ -186,7 +186,9 @@ class Game {
     // Player 2 controls (human). Swap to AI per TODO above.
     if (this.input.isDown(Config.keys.p2Up)) this.paddleRight.move(-this.paddleRight.speed);
     if (this.input.isDown(Config.keys.p2Down)) this.paddleRight.move(this.paddleRight.speed);
-  }
+    if (this.ball.position.y > centerY) {this.paddleRight.move(this.paddleRight.speed);
+    } else {this.paddleRight.move(this.paddleRight.speed)}
+    }
 
   update() {
     if (this.gameOver) return;

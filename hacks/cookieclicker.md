@@ -12,12 +12,15 @@ body {
     background: linear-gradient(180deg, #f3e2c7, #c9a66b);
     font-family: system-ui, sans-serif;
     text-align: center;
+    overflow: hidden; /* So background cookies don't create scrollbars */
 }
 
 .game {
     max-width: 600px;
     margin: 40px auto;
     padding: 20px;
+    position: relative;
+    z-index: 2;
 }
 
 #cookie {
@@ -38,6 +41,8 @@ body {
     padding: 15px;
     border-radius: 12px;
     margin-top: 15px;
+    position: relative;
+    z-index: 2;
 }
 
 button {
@@ -67,11 +72,26 @@ button:disabled {
     color: gold;
     pointer-events: none;
     animation: floatUp 1s forwards;
+    z-index: 3;
 }
 
 @keyframes floatUp {
     0% { transform: translateY(0); opacity:1; }
     100% { transform: translateY(-50px); opacity:0; }
+}
+
+.cookie-bg {
+    position: absolute;
+    font-size: 30px;
+    pointer-events: none;
+    animation: moveDown linear infinite;
+    opacity: 0.6;
+    z-index: 1;
+}
+
+@keyframes moveDown {
+    0% { transform: translateY(-50px); }
+    100% { transform: translateY(100vh); }
 }
 </style>
 
@@ -205,6 +225,19 @@ setInterval(()=>{
         render();
     }
 },1000);
+
+/* -------------------- BACKGROUND COOKIES -------------------- */
+function spawnCookieBg(){
+    const span = document.createElement("span");
+    span.className = "cookie-bg";
+    span.textContent = "🍪";
+    span.style.left = Math.random()*window.innerWidth + "px";
+    span.style.fontSize = (20 + Math.random()*20) + "px";
+    span.style.animationDuration = (5 + Math.random()*5) + "s";
+    document.body.appendChild(span);
+    setTimeout(()=>span.remove(),10000);
+}
+setInterval(spawnCookieBg, 500);
 
 /* -------------------- SAVE -------------------- */
 function saveGame(){

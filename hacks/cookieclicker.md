@@ -88,7 +88,6 @@ button:disabled {
     100% { transform: translateY(-50px); opacity:0; }
 }
 
-/* Reset High Score button styling */
 #reset-high {
     background: #d9534f !important;
     color: white;
@@ -123,14 +122,16 @@ button:disabled {
 </div>
 
 <script>
-// -------------------- GAME STATE --------------------
+// -------------------- STATE --------------------
 let highScore = Number(localStorage.getItem("cookie_clicker_high")) || 0;
 let player = {cookies:0, perClick:1, perSecond:0};
+
 let upgrades = [
     {name:"🖱 Cursor", cost:10, effect:1, type:"click", owned:0},
     {name:"👵 Grandma", cost:25, effect:1, type:"auto", owned:0},
     {name:"🏭 Factory", cost:100, effect:5, type:"auto", owned:0}
 ];
+
 let achievements = [
     {name:"First Cookie", condition: p => p.cookies >= 1, unlocked:false},
     {name:"100 Cookies", condition: p => p.cookies >= 100, unlocked:false},
@@ -155,8 +156,6 @@ function resizeCanvas(){
     const rect = cookieEl.getBoundingClientRect();
     crackCanvas.width = rect.width;
     crackCanvas.height = rect.height;
-    crackCanvas.style.top = 0;
-    crackCanvas.style.left = 0;
 }
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
@@ -200,12 +199,9 @@ function render() {
 
 // -------------------- COOKIE CLICK --------------------
 cookieEl.onclick = () => {
-    let gain = player.perClick;
-    if(Math.random() < 0.2) gain *= 5;
-
-    player.cookies += gain;
+    player.cookies += player.perClick;
     drawCracks();
-    showFloating("+"+gain);
+    showFloating("+"+player.perClick);
 
     cookieEl.style.transform = "scale(0.9)";
     setTimeout(()=>cookieEl.style.transform="scale(1)",100);
@@ -218,7 +214,7 @@ cookieEl.onclick = () => {
     render();
 };
 
-// -------------------- CRACKS INSIDE COOKIE --------------------
+// -------------------- CRACKS --------------------
 function drawCracks(){
     const radius = crackCanvas.width/2;
     const centerX = radius;
@@ -228,7 +224,7 @@ function drawCracks(){
 
     for(let i=0;i<numCracks;i++){
         let angle = Math.random()*2*Math.PI;
-        let r = Math.random()*radius*0.8; // inside cookie
+        let r = Math.random()*radius*0.8;
         let x0 = centerX + r*Math.cos(angle);
         let y0 = centerY + r*Math.sin(angle);
 
@@ -245,7 +241,6 @@ function drawCracks(){
             x += stepR*Math.cos(stepAngle);
             y += stepR*Math.sin(stepAngle);
 
-            // keep inside circle
             let dx = x-centerX;
             let dy = y-centerY;
             let dist = Math.sqrt(dx*dx+dy*dy);
@@ -264,7 +259,7 @@ function clearCracks(){
     ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height);
 }
 
-// -------------------- FLOATING NUMBERS --------------------
+// -------------------- FLOATING --------------------
 function showFloating(text){
     const span = document.createElement("span");
     span.textContent = text;
@@ -276,7 +271,7 @@ function showFloating(text){
     setTimeout(()=>span.remove(),1000);
 }
 
-// -------------------- AUTO-CLICKER --------------------
+// -------------------- AUTO CLICK --------------------
 setInterval(()=>{
     if(player.perSecond>0){
         player.cookies += player.perSecond;
@@ -292,8 +287,8 @@ setInterval(()=>{
 resetHighBtn.onclick = ()=>{
     localStorage.setItem("cookie_clicker_high", 0);
     highScore = 0;
+    highScoreEl.textContent = highScore;
     clearCracks();
-    render();
 };
 
 // -------------------- INITIALIZE --------------------

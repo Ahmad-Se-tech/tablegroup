@@ -28,10 +28,13 @@ body {
     display: block;
     margin: 20px auto;
 }
-#cookie:active { transform: scale(0.9); }
+
+#cookie:active {
+    transform: scale(0.9);
+}
 
 .panel {
-    background: rgba(255,255,255,0.8);
+    background: rgba(255, 255, 255, 0.85);
     padding: 15px;
     border-radius: 12px;
     margin-top: 15px;
@@ -45,108 +48,29 @@ button {
     margin: 5px;
     border-radius: 8px;
     cursor: pointer;
+    transition: transform 0.1s, background 0.2s;
 }
+
+button:hover:not(:disabled) {
+    background: #a77244;
+    transform: scale(1.05);
+}
+
 button:disabled {
     background: #aaa;
     cursor: not-allowed;
 }
-</style>
 
-<div class="game">
-    <h2>🍪 Cookie Clicker</h2>
-    <h3>Cookies: <span id="cookies">0</span></h3>
-    <p>Per Click: <span id="perClick">1</span> | Per Second: <span id="perSecond">0</span></p>
-
-    <div id="cookie">🍪</div>
-
-    <div class="panel">
-        <h3>🛒 Shop</h3>
-        <div id="shop"></div>
-    </div>
-
-    <div class="panel">
-        <h3>🏆 Achievements</h3>
-        <ul id="achievements"></ul>
-    </div>
-</div>
-
-<script>
-/* ---------- SIMPLE GAME STATE ---------- */
-let player = JSON.parse(localStorage.getItem("cookie_clicker")) || {cookies:0, perClick:1, perSecond:0};
-let upgrades = [
-    {name:"🖱 Cursor", cost:10, effect:1, type:"click", owned:0},
-    {name:"👵 Grandma", cost:25, effect:1, type:"auto", owned:0},
-    {name:"🏭 Factory", cost:100, effect:5, type:"auto", owned:0}
-];
-let achievements = [
-    {name:"First Cookie", condition: p => p.cookies >= 1, unlocked:false},
-    {name:"100 Cookies", condition: p => p.cookies >= 100, unlocked:false},
-    {name:"Cookie Factory", condition: p => p.perSecond >= 10, unlocked:false}
-];
-
-/* ---------- ELEMENTS ---------- */
-const cookieEl = document.getElementById("cookie");
-const shopEl = document.getElementById("shop");
-const achEl = document.getElementById("achievements");
-const cookiesEl = document.getElementById("cookies");
-const perClickEl = document.getElementById("perClick");
-const perSecondEl = document.getElementById("perSecond");
-
-/* ---------- RENDER ---------- */
-function render() {
-    cookiesEl.textContent = Math.floor(player.cookies);
-    perClickEl.textContent = player.perClick;
-    perSecondEl.textContent = player.perSecond;
-
-    // Shop buttons
-    shopEl.innerHTML = "";
-    upgrades.forEach(u=>{
-        const btn = document.createElement("button");
-        btn.textContent = `${u.name} (${u.cost}) [Owned: ${u.owned}]`;
-        btn.disabled = player.cookies < u.cost;
-        btn.onclick = ()=>{
-            if(player.cookies >= u.cost){
-                player.cookies -= u.cost;
-                u.owned++;
-                u.cost = Math.floor(u.cost * 1.5);
-                if(u.type==="click") player.perClick += u.effect;
-                else player.perSecond += u.effect;
-                saveGame();
-                render();
-            }
-        };
-        shopEl.appendChild(btn);
-    });
-
-    // Achievements
-    achEl.innerHTML = "";
-    achievements.forEach(a=>{
-        if(!a.unlocked && a.condition(player)) a.unlocked = true;
-        const li = document.createElement("li");
-        li.textContent = a.unlocked ? `✅ ${a.name}` : `🔒 ${a.name}`;
-        achEl.appendChild(li);
-    });
+.floating {
+    position: absolute;
+    font-weight: bold;
+    color: gold;
+    pointer-events: none;
+    animation: floatUp 1s forwards;
 }
 
-/* ---------- COOKIE CLICK ---------- */
-cookieEl.onclick = ()=>{
-    player.cookies += player.perClick;
-    cookieEl.style.transform = "scale(0.9)";
-    setTimeout(()=>cookieEl.style.transform="scale(1)",100);
-    saveGame();
-    render();
-};
-
-/* ---------- AUTO-CLICKER ---------- */
-setInterval(()=>{
-    player.cookies += player.perSecond;
-    saveGame();
-    render();
-},1000);
-
-/* ---------- SAVE & LOAD ---------- */
-function saveGame(){ localStorage.setItem("cookie_clicker", JSON.stringify(player)); }
-
-/* ---------- INITIALIZE ---------- */
-render();
-</script>
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity:1; }
+    100% { transform: translateY(-50px); opacity:0; }
+}
+</style>

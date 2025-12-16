@@ -3,7 +3,7 @@ title: Cookie Clicker
 comments: true
 hide: true
 layout: opencs
-description: play cookie clicker when you are bored or for fun!!
+description: Play Cookie Clicker when you are bored or for fun!!
 permalink: /cookie-clicker/
 ---
 
@@ -33,6 +33,10 @@ body {
     transition: transform 0.1s;
     z-index: 1;
     position: relative;
+}
+
+#cookie:active {
+    transform: scale(0.9);
 }
 
 #cookie-crack {
@@ -83,6 +87,17 @@ button:disabled {
     0% { transform: translateY(0); opacity:1; }
     100% { transform: translateY(-50px); opacity:0; }
 }
+
+/* Reset High Score button styling */
+#reset-high {
+    background: #d9534f !important;
+    color: white;
+    margin-top: 15px;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+    font-weight: bold;
+}
 </style>
 
 <div class="game">
@@ -98,7 +113,7 @@ button:disabled {
     <div class="panel">
         <h3>🛒 Shop</h3>
         <div id="shop"></div>
-        <button id="reset-high" style="background:#d9534f;">Reset High Score</button>
+        <button id="reset-high">Reset High Score</button>
     </div>
 
     <div class="panel">
@@ -166,7 +181,7 @@ function render() {
                 u.cost = Math.floor(u.cost * 1.5);
                 if(u.type==="click") player.perClick += u.effect;
                 else player.perSecond += u.effect;
-                clearCracks();
+                clearCracks(); // reset cracks after purchase
                 render();
             }
         };

@@ -19,8 +19,6 @@ body {
     max-width: 600px;
     margin: 40px auto;
     padding: 20px;
-    position: relative;
-    z-index: 2;
 }
 
 #cookie-container {
@@ -33,10 +31,8 @@ body {
     cursor: pointer;
     user-select: none;
     transition: transform 0.1s;
-}
-
-#cookie:active {
-    transform: scale(0.9);
+    z-index: 1;
+    position: relative;
 }
 
 #cookie-crack {
@@ -44,6 +40,7 @@ body {
     top: 0;
     left: 0;
     pointer-events: none;
+    z-index: 2;
 }
 
 .panel {
@@ -51,8 +48,6 @@ body {
     padding: 15px;
     border-radius: 12px;
     margin-top: 15px;
-    position: relative;
-    z-index: 2;
 }
 
 button {
@@ -82,26 +77,11 @@ button:disabled {
     color: gold;
     pointer-events: none;
     animation: floatUp 1s forwards;
-    z-index: 3;
 }
 
 @keyframes floatUp {
     0% { transform: translateY(0); opacity:1; }
     100% { transform: translateY(-50px); opacity:0; }
-}
-
-.cookie-bg {
-    position: absolute;
-    font-size: 30px;
-    pointer-events: none;
-    animation: moveDown linear infinite;
-    opacity: 0.6;
-    z-index: 1;
-}
-
-@keyframes moveDown {
-    0% { transform: translateY(-50px); }
-    100% { transform: translateY(100vh); }
 }
 </style>
 
@@ -118,7 +98,7 @@ button:disabled {
     <div class="panel">
         <h3>🛒 Shop</h3>
         <div id="shop"></div>
-        <button id="reset-high" style="background:#d9534f; color:white; margin-top:10px;">Reset High Score</button>
+        <button id="reset-high" style="background:#d9534f;">Reset High Score</button>
     </div>
 
     <div class="panel">
@@ -128,7 +108,7 @@ button:disabled {
 </div>
 
 <script>
-/* -------------------- GAME STATE -------------------- */
+// -------------------- GAME STATE --------------------
 let highScore = Number(localStorage.getItem("cookie_clicker_high")) || 0;
 let player = {cookies:0, perClick:1, perSecond:0};
 let upgrades = [
@@ -142,8 +122,9 @@ let achievements = [
     {name:"Cookie Factory", condition: p => p.perSecond >= 10, unlocked:false}
 ];
 
-/* -------------------- ELEMENTS -------------------- */
+// -------------------- ELEMENTS --------------------
 const cookieEl = document.getElementById("cookie");
+const container = document.getElementById("cookie-container");
 const crackCanvas = document.getElementById("cookie-crack");
 const ctx = crackCanvas.getContext("2d");
 const shopEl = document.getElementById("shop");
@@ -154,18 +135,18 @@ const perClickEl = document.getElementById("perClick");
 const perSecondEl = document.getElementById("perSecond");
 const resetHighBtn = document.getElementById("reset-high");
 
-/* -------------------- CANVAS RESIZE -------------------- */
-function resizeCrackCanvas(){
+// -------------------- CANVAS RESIZE --------------------
+function resizeCanvas(){
     const rect = cookieEl.getBoundingClientRect();
     crackCanvas.width = rect.width;
     crackCanvas.height = rect.height;
     crackCanvas.style.top = 0;
     crackCanvas.style.left = 0;
 }
-window.addEventListener("resize", resizeCrackCanvas);
-resizeCrackCanvas();
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
 
-/* -------------------- RENDER -------------------- */
+// -------------------- RENDER --------------------
 function render() {
     cookiesEl.textContent = Math.floor(player.cookies);
     perClickEl.textContent = player.perClick;
@@ -185,7 +166,7 @@ function render() {
                 u.cost = Math.floor(u.cost * 1.5);
                 if(u.type==="click") player.perClick += u.effect;
                 else player.perSecond += u.effect;
-                clearCracks(); // Reset cracks
+                clearCracks();
                 render();
             }
         };
@@ -202,19 +183,15 @@ function render() {
     });
 }
 
-/* -------------------- COOKIE CLICK -------------------- */
+// -------------------- COOKIE CLICK --------------------
 cookieEl.onclick = () => {
     let gain = player.perClick;
-
-    if(Math.random() < 0.2){
-        gain *= 5;
-        showFloating("+💛"+gain);
-    } else {
-        showFloating("+"+gain);
-    }
+    if(Math.random() < 0.2) gain *= 5;
 
     player.cookies += gain;
     drawCracks();
+    showFloating("+"+gain);
+
     cookieEl.style.transform = "scale(0.9)";
     setTimeout(()=>cookieEl.style.transform="scale(1)",100);
 
@@ -226,9 +203,9 @@ cookieEl.onclick = () => {
     render();
 };
 
-/* -------------------- DRAW REALISTIC CRACKS -------------------- */
+// -------------------- REALISTIC CRACKS --------------------
 function drawCracks(){
-    const numCracks = 2 + Math.floor(Math.random()*4);
+    const numCracks = 3 + Math.floor(Math.random()*3);
     for(let i=0;i<numCracks;i++){
         const x0 = Math.random()*crackCanvas.width;
         const y0 = Math.random()*crackCanvas.height;
@@ -246,27 +223,26 @@ function drawCracks(){
         ctx.stroke();
     }
 }
-
 function clearCracks(){
     ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height);
 }
 
-/* -------------------- FLOATING NUMBERS -------------------- */
+// -------------------- FLOATING NUMBERS --------------------
 function showFloating(text){
     const span = document.createElement("span");
     span.textContent = text;
     span.className = "floating";
-    span.style.left = (cookieEl.offsetLeft + cookieEl.offsetWidth/2 + (Math.random()*40-20)) + "px";
-    span.style.top = (cookieEl.offsetTop - 20 + (Math.random()*10-5)) + "px";
+    const rect = cookieEl.getBoundingClientRect();
+    span.style.left = (rect.left + rect.width/2 + (Math.random()*40-20)) + "px";
+    span.style.top = (rect.top + window.scrollY - 20 + (Math.random()*10-5)) + "px";
     document.body.appendChild(span);
     setTimeout(()=>span.remove(),1000);
 }
 
-/* -------------------- AUTO-CLICKER -------------------- */
+// -------------------- AUTO-CLICKER --------------------
 setInterval(()=>{
     if(player.perSecond>0){
         player.cookies += player.perSecond;
-        showFloating("+"+player.perSecond);
         if(player.cookies > highScore){
             highScore = Math.floor(player.cookies);
             localStorage.setItem("cookie_clicker_high", highScore);
@@ -275,26 +251,13 @@ setInterval(()=>{
     }
 },1000);
 
-/* -------------------- BACKGROUND COOKIES -------------------- */
-function spawnCookieBg(){
-    const span = document.createElement("span");
-    span.className = "cookie-bg";
-    span.textContent = "🍪";
-    span.style.left = Math.random()*window.innerWidth + "px";
-    span.style.fontSize = (20 + Math.random()*20) + "px";
-    span.style.animationDuration = (5 + Math.random()*5) + "s";
-    document.body.appendChild(span);
-    setTimeout(()=>span.remove(),10000);
-}
-setInterval(spawnCookieBg, 500);
-
-/* -------------------- RESET HIGH SCORE -------------------- */
-resetHighBtn.onclick = () => {
+// -------------------- RESET HIGH SCORE --------------------
+resetHighBtn.onclick = ()=>{
     localStorage.setItem("cookie_clicker_high", 0);
     highScore = 0;
     render();
 };
 
-/* -------------------- INITIALIZE -------------------- */
+// -------------------- INITIALIZE --------------------
 render();
 </script>

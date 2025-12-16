@@ -61,7 +61,7 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
   <a href="/tablegroup/rock-paper-scissor" style="text-decoration: none;">
     <div style="background-color: #6a1292ff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
          onmouseover="this.style.backgroundColor='#404b7a';" 
-         onmouseout="this.style.backgroundColor='#0a1130ff';">
+         onmouseout="this.style.backgroundColor='#6a1292ff';">
         Rock Paper Scissors
     </div>
   </a>

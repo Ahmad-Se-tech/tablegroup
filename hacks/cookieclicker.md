@@ -88,7 +88,6 @@ button:disabled {
     100% { transform: translateY(-50px); opacity:0; }
 }
 
-/* Reset button inline with High Score */
 #reset-high {
     display: inline-block;
     background: #d9534f;
@@ -173,6 +172,72 @@ function resizeCanvas(){
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
+// -------------------- CRACKS & CRUMBS --------------------
+let crumbs = [];
+
+function drawCracks() {
+    crumbs = [];
+    const radius = crackCanvas.width/2;
+    const centerX = radius;
+    const centerY = radius;
+    const numCracks = 4 + Math.floor(Math.random()*3);
+
+    for(let i=0;i<numCracks;i++){
+        let angle = Math.random()*2*Math.PI;
+        let r = Math.random()*radius*0.3;
+        let x0 = centerX + r*Math.cos(angle);
+        let y0 = centerY + r*Math.sin(angle);
+
+        const steps = 4 + Math.floor(Math.random()*3);
+        ctx.strokeStyle = "rgba(0,0,0,0.6)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(x0,y0);
+
+        let x = x0, y = y0;
+        for(let s=0;s<steps;s++){
+            let stepAngle = (Math.random()-0.5)*Math.PI/2;
+            let stepR = 5 + Math.random()*10;
+            x += stepR*Math.cos(stepAngle);
+            y += stepR*Math.sin(stepAngle);
+
+            let dx = x-centerX;
+            let dy = y-centerY;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            if(dist>radius){
+                x = centerX + dx/dist*radius*0.95;
+                y = centerY + dy/dist*radius*0.95;
+            }
+
+            ctx.lineTo(x,y);
+
+            // Add crumbs at crack points
+            if(Math.random()<0.4){
+                crumbs.push({x,y,size:2+Math.random()*3,dy:1+Math.random()*2});
+            }
+        }
+        ctx.stroke();
+    }
+}
+
+function drawCrumbs(){
+    crumbs.forEach(c=>{
+        ctx.fillStyle = "#d1a15f";
+        ctx.beginPath();
+        ctx.arc(c.x,c.y,c.size,0,Math.PI*2);
+        ctx.fill();
+        c.y += c.dy;
+        c.dy += 0.05; // gravity
+    });
+    crumbs = crumbs.filter(c=>c.y < crackCanvas.height);
+}
+
+function renderCracksAndCrumbs(){
+    ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height);
+    drawCracks();
+    drawCrumbs();
+}
+
 // -------------------- RENDER --------------------
 function render() {
     cookiesEl.textContent = Math.floor(player.cookies);
@@ -190,10 +255,11 @@ function render() {
             if(player.cookies >= u.cost){
                 player.cookies -= u.cost;
                 u.owned++;
-                u.cost = Math.floor(u.cost * 1.5);
+                u.cost = Math.floor(u.cost*1.5);
                 if(u.type==="click") player.perClick += u.effect;
                 else player.perSecond += u.effect;
-                clearCracks(); // reset cracks after purchase
+                ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height); // reset cracks
+                crumbs = [];
                 render();
             }
         };
@@ -208,12 +274,14 @@ function render() {
         li.textContent = a.unlocked ? `✅ ${a.name}` : `🔒 ${a.name}`;
         achEl.appendChild(li);
     });
+
+    renderCracksAndCrumbs();
 }
 
 // -------------------- COOKIE CLICK --------------------
-cookieEl.onclick = () => {
+cookieEl.onclick = ()=>{
     player.cookies += player.perClick;
-    drawCracks();
+    renderCracksAndCrumbs();
     showFloating("+"+player.perClick);
 
     cookieEl.style.transform = "scale(0.9)";
@@ -221,58 +289,13 @@ cookieEl.onclick = () => {
 
     if(player.cookies > highScore){
         highScore = Math.floor(player.cookies);
-        localStorage.setItem("cookie_clicker_high", highScore);
+        localStorage.setItem("cookie_clicker_high",highScore);
     }
 
     render();
 };
 
-// -------------------- CRACKS --------------------
-function drawCracks(){
-    const radius = crackCanvas.width/2;
-    const centerX = radius;
-    const centerY = radius;
-
-    const numCracks = 3 + Math.floor(Math.random()*3);
-
-    for(let i=0;i<numCracks;i++){
-        let angle = Math.random()*2*Math.PI;
-        let r = Math.random()*radius*0.8;
-        let x0 = centerX + r*Math.cos(angle);
-        let y0 = centerY + r*Math.sin(angle);
-
-        const steps = 3 + Math.floor(Math.random()*3);
-        ctx.strokeStyle = "rgba(0,0,0,0.5)";
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(x0,y0);
-
-        let x = x0, y = y0;
-        for(let s=0; s<steps; s++){
-            let stepAngle = Math.random()*2*Math.PI;
-            let stepR = Math.random()*15;
-            x += stepR*Math.cos(stepAngle);
-            y += stepR*Math.sin(stepAngle);
-
-            let dx = x-centerX;
-            let dy = y-centerY;
-            let dist = Math.sqrt(dx*dx+dy*dy);
-            if(dist>radius) {
-                x = centerX + dx/dist*radius;
-                y = centerY + dy/dist*radius;
-            }
-
-            ctx.lineTo(x,y);
-        }
-        ctx.stroke();
-    }
-}
-
-function clearCracks(){
-    ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height);
-}
-
-// -------------------- FLOATING --------------------
+// -------------------- FLOATING POINTS --------------------
 function showFloating(text){
     const span = document.createElement("span");
     span.textContent = text;
@@ -290,7 +313,7 @@ setInterval(()=>{
         player.cookies += player.perSecond;
         if(player.cookies > highScore){
             highScore = Math.floor(player.cookies);
-            localStorage.setItem("cookie_clicker_high", highScore);
+            localStorage.setItem("cookie_clicker_high",highScore);
         }
         render();
     }
@@ -298,10 +321,9 @@ setInterval(()=>{
 
 // -------------------- RESET HIGH SCORE --------------------
 resetHighBtn.onclick = ()=>{
-    localStorage.setItem("cookie_clicker_high", 0);
+    localStorage.setItem("cookie_clicker_high",0);
     highScore = 0;
     highScoreEl.textContent = highScore;
-    clearCracks();
 };
 
 // -------------------- INITIALIZE --------------------

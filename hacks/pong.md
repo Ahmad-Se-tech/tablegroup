@@ -192,7 +192,10 @@ let paddleCenterY = this.paddleRight.position.y + (this.paddleRight.height / 2);
 if (this.ball.position.y > paddleCenterY) {
     this.paddleRight.move(this.paddleRight.speed); // Move Down
 } else if (this.ball.position.y < paddleCenterY) {
-    this.paddleRight.move(-this.paddleRight.speed); // Move Up
+    this.palet centerY = Config.canvas.height / 2;
+    if (this.ball.position.y > centerY) {this.paddleRight.move(this.paddleRight.speed * 4)}
+    else {this.paddleRight.move(-this.paddleRight.speed * 4);}
+ddleRight.move(-this.paddleRight.speed); // Move Up
 }
 let a = 0.5
 let b = Math.pow(0.25, this.scores.p2);

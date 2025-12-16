@@ -61,7 +61,7 @@ const Config = {
     p1Up: "w", p1Down: "s",
     p2Up: "i", p2Down: "k"
   },
-  visuals: { bg: "#000", fg: "#fff", text: "#fff", gameOver: "red", win: "yellow" }
+  visuals: { bg: "#000", fg: "#fff", text: "#fff", gameOver: "red", win: "green" }
 };
 
 // Basic vector helper for clarity
@@ -157,9 +157,9 @@ class Game {
     this.input = new Input();
 
     // Entities
-    const { imagePath, width, height, speed } = Config.paddle;
-    this.paddleLeft = new Paddle(0, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height);
-    this.paddleRight = new Paddle(Config.canvas.width - width, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height);
+    const { imagePath, width, height, speed, imagePath} = Config.paddle;
+    this.paddleLeft = new Paddle(0, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height, imagePath);
+    this.paddleRight = new Paddle(Config.canvas.width - width, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height, imagePath);
     this.ball = new Ball(Config.ball.radius, Config.canvas.width, Config.canvas.height);
 
     // Rules/state

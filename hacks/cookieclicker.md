@@ -13,8 +13,6 @@ body {
     font-family: system-ui, sans-serif;
     text-align: center;
     overflow: hidden;
-    position: relative;
-    height: 100vh;
 }
 
 .game {
@@ -110,19 +108,28 @@ button:disabled {
     background: #c9302c;
 }
 
-.falling-cookie {
-    position: absolute;
-    font-size: 20px;
-    pointer-events: none;
-    opacity: 0.7;
-    animation-name: fallCookie;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
+/* Achievements smaller font */
+.panel ul#achievements {
+    font-size: 14px;
+    margin: 0;
+    padding-left: 20px;
+    max-height: 150px;
+    overflow-y: auto;
 }
 
-@keyframes fallCookie {
-    0% { transform: translateY(-30px); }
-    100% { transform: translateY(100vh); }
+/* Falling cookies in background */
+.fall-cookie {
+    position: absolute;
+    font-size: 30px;
+    pointer-events: none;
+    opacity: 0.8;
+    animation-name: fall;
+    animation-timing-function: linear;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-50px); opacity:0.8; }
+    100% { transform: translateY(600px); opacity:0; }
 }
 </style>
 
@@ -152,7 +159,6 @@ button:disabled {
 </div>
 
 <script>
-// -------------------- STATE --------------------
 let highScore = Number(localStorage.getItem("cookie_clicker_high")) || 0;
 let player = {cookies:0, perClick:1, perSecond:0};
 
@@ -168,7 +174,6 @@ let achievements = [
     {name:"Cookie Factory", condition: p => p.perSecond >= 10, unlocked:false}
 ];
 
-// -------------------- ELEMENTS --------------------
 const cookieEl = document.getElementById("cookie");
 const container = document.getElementById("cookie-container");
 const crackCanvas = document.getElementById("cookie-crack");
@@ -181,7 +186,6 @@ const perClickEl = document.getElementById("perClick");
 const perSecondEl = document.getElementById("perSecond");
 const resetHighBtn = document.getElementById("reset-high");
 
-// -------------------- CANVAS RESIZE --------------------
 function resizeCanvas(){
     const rect = cookieEl.getBoundingClientRect();
     crackCanvas.width = rect.width;
@@ -190,21 +194,6 @@ function resizeCanvas(){
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
-// -------------------- BACKGROUND FALLING COOKIES --------------------
-const fallingCookies = [];
-for(let i=0;i<20;i++){
-    const el = document.createElement("div");
-    el.className="falling-cookie";
-    el.textContent = "🍪";
-    el.style.left = Math.random()*window.innerWidth+"px";
-    el.style.fontSize = (10+Math.random()*20)+"px";
-    el.style.animationDuration = (5+Math.random()*5)+"s";
-    el.style.animationDelay = (Math.random()*5)+"s";
-    document.body.appendChild(el);
-    fallingCookies.push(el);
-}
-
-// -------------------- RENDER --------------------
 function render() {
     cookiesEl.textContent = Math.floor(player.cookies);
     perClickEl.textContent = player.perClick;
@@ -224,7 +213,7 @@ function render() {
                 u.cost = Math.floor(u.cost * 1.5);
                 if(u.type==="click") player.perClick += u.effect;
                 else player.perSecond += u.effect;
-                clearCracks(); // reset cracks after purchase
+                clearCracks(); // reset cracks
                 render();
             }
         };
@@ -241,7 +230,6 @@ function render() {
     });
 }
 
-// -------------------- COOKIE CLICK --------------------
 cookieEl.onclick = () => {
     player.cookies += player.perClick;
     drawCracks();
@@ -258,14 +246,13 @@ cookieEl.onclick = () => {
     render();
 };
 
-// -------------------- CRACKS --------------------
 function drawCracks(){
-    clearCracks();
+    ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height);
     const radius = crackCanvas.width/2;
     const centerX = radius;
     const centerY = radius;
-
     const numCracks = 3 + Math.floor(Math.random()*3);
+
     for(let i=0;i<numCracks;i++){
         let angle = Math.random()*2*Math.PI;
         let r = Math.random()*radius*0.8;
@@ -296,23 +283,6 @@ function drawCracks(){
             ctx.lineTo(x,y);
         }
         ctx.stroke();
-
-        // create falling crumb
-        const crumb = document.createElement("div");
-        crumb.textContent = "🍪";
-        crumb.style.position="absolute";
-        crumb.style.left=(cookieEl.offsetLeft + x - 10 + Math.random()*20 -10)+"px";
-        crumb.style.top=(cookieEl.offsetTop + y - 10)+"px";
-        crumb.style.fontSize=(5+Math.random()*10)+"px";
-        crumb.style.pointerEvents="none";
-        crumb.style.opacity=0.7;
-        crumb.style.transition="transform 2s linear, opacity 2s";
-        document.body.appendChild(crumb);
-        setTimeout(()=>{
-            crumb.style.transform="translateY(50px)";
-            crumb.style.opacity=0;
-        },50);
-        setTimeout(()=>crumb.remove(),2000);
     }
 }
 
@@ -320,7 +290,6 @@ function clearCracks(){
     ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height);
 }
 
-// -------------------- FLOATING --------------------
 function showFloating(text){
     const span = document.createElement("span");
     span.textContent = text;
@@ -332,7 +301,7 @@ function showFloating(text){
     setTimeout(()=>span.remove(),1000);
 }
 
-// -------------------- AUTO CLICK --------------------
+// Auto cookies
 setInterval(()=>{
     if(player.perSecond>0){
         player.cookies += player.perSecond;
@@ -344,7 +313,7 @@ setInterval(()=>{
     }
 },1000);
 
-// -------------------- RESET HIGH SCORE --------------------
+// Reset high score
 resetHighBtn.onclick = ()=>{
     localStorage.setItem("cookie_clicker_high", 0);
     highScore = 0;
@@ -352,6 +321,18 @@ resetHighBtn.onclick = ()=>{
     clearCracks();
 };
 
-// -------------------- INITIALIZE --------------------
+// Falling cookies background
+function createFallingCookie(){
+    const cookie = document.createElement("div");
+    cookie.className = "fall-cookie";
+    cookie.textContent = "🍪";
+    cookie.style.left = Math.random()*window.innerWidth + "px";
+    cookie.style.animationDuration = (3 + Math.random()*3) + "s";
+    cookie.style.fontSize = (15+Math.random()*25) + "px";
+    document.body.appendChild(cookie);
+    setTimeout(()=>cookie.remove(),6000);
+}
+setInterval(createFallingCookie, 500);
+
 render();
 </script>

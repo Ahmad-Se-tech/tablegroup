@@ -23,7 +23,7 @@ comments: True
   }
   #pongCanvas {
     border: 2px solid #fff;
-    background: #000;
+    background: #155dc9ff;
   }
   #restartBtn {
     display: none;

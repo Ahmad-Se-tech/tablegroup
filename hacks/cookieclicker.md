@@ -88,7 +88,6 @@ button:disabled {
     100% { transform: translateY(-50px); opacity:0; }
 }
 
-/* Reset button inline with High Score */
 #reset-high {
     display: inline-block;
     background: #d9534f;
@@ -173,68 +172,14 @@ function resizeCanvas(){
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
-// -------------------- RENDER --------------------
-function render() {
-    cookiesEl.textContent = Math.floor(player.cookies);
-    perClickEl.textContent = player.perClick;
-    perSecondEl.textContent = player.perSecond;
-    highScoreEl.textContent = highScore;
-
-    // Shop
-    shopEl.innerHTML = "";
-    upgrades.forEach(u=>{
-        const btn = document.createElement("button");
-        btn.textContent = `${u.name} (${u.cost}) [Owned: ${u.owned}]`;
-        btn.disabled = player.cookies < u.cost;
-        btn.onclick = ()=>{
-            if(player.cookies >= u.cost){
-                player.cookies -= u.cost;
-                u.owned++;
-                u.cost = Math.floor(u.cost * 1.5);
-                if(u.type==="click") player.perClick += u.effect;
-                else player.perSecond += u.effect;
-                clearCracks(); // reset cracks after purchase
-                render();
-            }
-        };
-        shopEl.appendChild(btn);
-    });
-
-    // Achievements
-    achEl.innerHTML = "";
-    achievements.forEach(a=>{
-        if(!a.unlocked && a.condition(player)) a.unlocked = true;
-        const li = document.createElement("li");
-        li.textContent = a.unlocked ? `✅ ${a.name}` : `🔒 ${a.name}`;
-        achEl.appendChild(li);
-    });
-}
-
-// -------------------- COOKIE CLICK --------------------
-cookieEl.onclick = () => {
-    player.cookies += player.perClick;
-    drawCracks();
-    showFloating("+"+player.perClick);
-
-    cookieEl.style.transform = "scale(0.9)";
-    setTimeout(()=>cookieEl.style.transform="scale(1)",100);
-
-    if(player.cookies > highScore){
-        highScore = Math.floor(player.cookies);
-        localStorage.setItem("cookie_clicker_high", highScore);
-    }
-
-    render();
-};
-
 // -------------------- CRACKS --------------------
 function drawCracks(){
     const radius = crackCanvas.width/2;
     const centerX = radius;
     const centerY = radius;
+    ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height);
 
     const numCracks = 3 + Math.floor(Math.random()*3);
-
     for(let i=0;i<numCracks;i++){
         let angle = Math.random()*2*Math.PI;
         let r = Math.random()*radius*0.8;
@@ -274,15 +219,83 @@ function clearCracks(){
 
 // -------------------- FLOATING --------------------
 function showFloating(text){
+    const rect = cookieEl.getBoundingClientRect();
+
+    // Floating points
     const span = document.createElement("span");
     span.textContent = text;
     span.className = "floating";
-    const rect = cookieEl.getBoundingClientRect();
     span.style.left = (rect.left + rect.width/2 + (Math.random()*40-20)) + "px";
     span.style.top = (rect.top + window.scrollY - 20 + (Math.random()*10-5)) + "px";
     document.body.appendChild(span);
     setTimeout(()=>span.remove(),1000);
+
+    // Floating cookie icon
+    const cookieSpan = document.createElement("span");
+    cookieSpan.textContent = "🍪";
+    cookieSpan.className = "floating";
+    cookieSpan.style.fontSize = "24px";
+    cookieSpan.style.left = (rect.left + rect.width/2 + (Math.random()*40-20)) + "px";
+    cookieSpan.style.top = (rect.top + window.scrollY - 10 + (Math.random()*10-5)) + "px";
+    document.body.appendChild(cookieSpan);
+    setTimeout(()=>cookieSpan.remove(),1200);
 }
+
+// -------------------- RENDER --------------------
+function render() {
+    cookiesEl.textContent = Math.floor(player.cookies);
+    perClickEl.textContent = player.perClick;
+    perSecondEl.textContent = player.perSecond;
+    highScoreEl.textContent = highScore;
+
+    // Shop
+    shopEl.innerHTML = "";
+    upgrades.forEach(u=>{
+        const btn = document.createElement("button");
+        btn.textContent = `${u.name} (${u.cost}) [Owned: ${u.owned}]`;
+        btn.disabled = player.cookies < u.cost;
+        btn.onclick = ()=>{
+            if(player.cookies >= u.cost){
+                player.cookies -= u.cost;
+                u.owned++;
+                u.cost = Math.floor(u.cost*1.5);
+                if(u.type==="click") player.perClick += u.effect;
+                else player.perSecond += u.effect;
+                clearCracks();
+                render();
+            }
+        };
+        shopEl.appendChild(btn);
+    });
+
+    // Achievements
+    achEl.innerHTML = "";
+    achievements.forEach(a=>{
+        if(!a.unlocked && a.condition(player)) a.unlocked = true;
+        const li = document.createElement("li");
+        li.textContent = a.unlocked ? `✅ ${a.name}` : `🔒 ${a.name}`;
+        achEl.appendChild(li);
+    });
+
+    drawCracks();
+}
+
+// -------------------- COOKIE CLICK --------------------
+cookieEl.onclick = ()=>{
+    player.cookies += player.perClick;
+    drawCracks();
+    showFloating("+"+player.perClick);
+
+    cookieEl.style.transform = "scale(0.9)";
+    setTimeout(()=>cookieEl.style.transform="scale(1)",100);
+
+    if(player.cookies > highScore){
+        highScore = Math.floor(player.cookies);
+        localStorage.setItem("cookie_clicker_high", highScore);
+    }
+
+    render();
+};
 
 // -------------------- AUTO CLICK --------------------
 setInterval(()=>{
@@ -298,7 +311,7 @@ setInterval(()=>{
 
 // -------------------- RESET HIGH SCORE --------------------
 resetHighBtn.onclick = ()=>{
-    localStorage.setItem("cookie_clicker_high", 0);
+    localStorage.setItem("cookie_clicker_high",0);
     highScore = 0;
     highScoreEl.textContent = highScore;
     clearCracks();

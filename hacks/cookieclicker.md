@@ -172,16 +172,14 @@ function resizeCanvas(){
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
-// -------------------- CRACKS & CRUMBS --------------------
-let crumbs = [];
-
+// -------------------- CRACKS --------------------
 function drawCracks() {
-    crumbs = [];
     const radius = crackCanvas.width/2;
     const centerX = radius;
     const centerY = radius;
-    const numCracks = 4 + Math.floor(Math.random()*3);
+    ctx.clearRect(0, 0, crackCanvas.width, crackCanvas.height);
 
+    const numCracks = 4 + Math.floor(Math.random()*3);
     for(let i=0;i<numCracks;i++){
         let angle = Math.random()*2*Math.PI;
         let r = Math.random()*radius*0.3;
@@ -203,39 +201,15 @@ function drawCracks() {
 
             let dx = x-centerX;
             let dy = y-centerY;
-            let dist = Math.sqrt(dx*dx + dy*dy);
+            let dist = Math.sqrt(dx*dx+dy*dy);
             if(dist>radius){
                 x = centerX + dx/dist*radius*0.95;
                 y = centerY + dy/dist*radius*0.95;
             }
-
             ctx.lineTo(x,y);
-
-            // Add crumbs at crack points
-            if(Math.random()<0.4){
-                crumbs.push({x,y,size:2+Math.random()*3,dy:1+Math.random()*2});
-            }
         }
         ctx.stroke();
     }
-}
-
-function drawCrumbs(){
-    crumbs.forEach(c=>{
-        ctx.fillStyle = "#d1a15f";
-        ctx.beginPath();
-        ctx.arc(c.x,c.y,c.size,0,Math.PI*2);
-        ctx.fill();
-        c.y += c.dy;
-        c.dy += 0.05; // gravity
-    });
-    crumbs = crumbs.filter(c=>c.y < crackCanvas.height);
-}
-
-function renderCracksAndCrumbs(){
-    ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height);
-    drawCracks();
-    drawCrumbs();
 }
 
 // -------------------- RENDER --------------------
@@ -258,8 +232,7 @@ function render() {
                 u.cost = Math.floor(u.cost*1.5);
                 if(u.type==="click") player.perClick += u.effect;
                 else player.perSecond += u.effect;
-                ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height); // reset cracks
-                crumbs = [];
+                drawCracks(); // reset cracks when buying
                 render();
             }
         };
@@ -275,14 +248,22 @@ function render() {
         achEl.appendChild(li);
     });
 
-    renderCracksAndCrumbs();
+    drawCracks();
 }
 
 // -------------------- COOKIE CLICK --------------------
 cookieEl.onclick = ()=>{
     player.cookies += player.perClick;
-    renderCracksAndCrumbs();
-    showFloating("+"+player.perClick);
+
+    // Floating points
+    const span = document.createElement("span");
+    span.textContent = "+"+player.perClick;
+    span.className = "floating";
+    const rect = cookieEl.getBoundingClientRect();
+    span.style.left = (rect.left + rect.width/2 + (Math.random()*40-20)) + "px";
+    span.style.top = (rect.top + window.scrollY - 20) + "px";
+    document.body.appendChild(span);
+    setTimeout(()=>span.remove(),1000);
 
     cookieEl.style.transform = "scale(0.9)";
     setTimeout(()=>cookieEl.style.transform="scale(1)",100);
@@ -292,20 +273,9 @@ cookieEl.onclick = ()=>{
         localStorage.setItem("cookie_clicker_high",highScore);
     }
 
+    drawCracks();
     render();
 };
-
-// -------------------- FLOATING POINTS --------------------
-function showFloating(text){
-    const span = document.createElement("span");
-    span.textContent = text;
-    span.className = "floating";
-    const rect = cookieEl.getBoundingClientRect();
-    span.style.left = (rect.left + rect.width/2 + (Math.random()*40-20)) + "px";
-    span.style.top = (rect.top + window.scrollY - 20 + (Math.random()*10-5)) + "px";
-    document.body.appendChild(span);
-    setTimeout(()=>span.remove(),1000);
-}
 
 // -------------------- AUTO CLICK --------------------
 setInterval(()=>{

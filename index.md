@@ -34,6 +34,14 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
 
 <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
 
+<a href="/tablegroup/snake" style="text-decoration: none;">
+    <div style="background-color: #6ca537ff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
+         onmouseover="this.style.backgroundColor='#d0e86b';" 
+         onmouseout="this.style.backgroundColor='#6ca537ff';">
+        Connect 4
+    </div>   
+  </a>
+
   <a href="/tablegroup/connect4" style="text-decoration: none;">
     <div style="background-color: #b4ce4bff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
          onmouseover="this.style.backgroundColor='#d0e86b';" 

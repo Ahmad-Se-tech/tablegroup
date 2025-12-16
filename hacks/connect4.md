@@ -354,3 +354,6 @@ permalink: /connect4/
 
 </body>
 </html>
+
+render();
+</script>

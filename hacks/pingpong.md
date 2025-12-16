@@ -141,7 +141,7 @@ class Renderer {
   }
   text(t, x, y, color = Config.visuals.text) {
     this.ctx.fillStyle = color;
-    this.ctx.font = "30px Arial";
+    this.ctx.font = "30px Verdana";
     this.ctx.fillText(t, x, y);
   }
 }

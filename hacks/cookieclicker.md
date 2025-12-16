@@ -112,13 +112,13 @@ button:disabled {
 
     <div id="cookie-container">
         <div id="cookie">🍪</div>
-        <canvas id="cookie-crack" width="90" height="90"></canvas>
+        <canvas id="cookie-crack"></canvas>
     </div>
 
     <div class="panel">
         <h3>🛒 Shop</h3>
         <div id="shop"></div>
-        <button id="reset-high">Reset High Score</button>
+        <button id="reset-high" style="background:#d9534f; color:white; margin-top:10px;">Reset High Score</button>
     </div>
 
     <div class="panel">
@@ -130,8 +130,6 @@ button:disabled {
 <script>
 /* -------------------- GAME STATE -------------------- */
 let highScore = Number(localStorage.getItem("cookie_clicker_high")) || 0;
-
-// Reset session cookies and upgrades every load
 let player = {cookies:0, perClick:1, perSecond:0};
 let upgrades = [
     {name:"🖱 Cursor", cost:10, effect:1, type:"click", owned:0},
@@ -156,6 +154,17 @@ const perClickEl = document.getElementById("perClick");
 const perSecondEl = document.getElementById("perSecond");
 const resetHighBtn = document.getElementById("reset-high");
 
+/* -------------------- CANVAS RESIZE -------------------- */
+function resizeCrackCanvas(){
+    const rect = cookieEl.getBoundingClientRect();
+    crackCanvas.width = rect.width;
+    crackCanvas.height = rect.height;
+    crackCanvas.style.top = 0;
+    crackCanvas.style.left = 0;
+}
+window.addEventListener("resize", resizeCrackCanvas);
+resizeCrackCanvas();
+
 /* -------------------- RENDER -------------------- */
 function render() {
     cookiesEl.textContent = Math.floor(player.cookies);
@@ -176,7 +185,7 @@ function render() {
                 u.cost = Math.floor(u.cost * 1.5);
                 if(u.type==="click") player.perClick += u.effect;
                 else player.perSecond += u.effect;
-                clearCracks(); // Reset cracks after purchase
+                clearCracks(); // Reset cracks
                 render();
             }
         };
@@ -217,19 +226,23 @@ cookieEl.onclick = () => {
     render();
 };
 
-/* -------------------- DRAW CRACKS -------------------- */
+/* -------------------- DRAW REALISTIC CRACKS -------------------- */
 function drawCracks(){
-    const numCracks = 3 + Math.floor(Math.random()*3);
+    const numCracks = 2 + Math.floor(Math.random()*4);
     for(let i=0;i<numCracks;i++){
-        const x1 = Math.random()*crackCanvas.width;
-        const y1 = Math.random()*crackCanvas.height;
-        const x2 = Math.random()*crackCanvas.width;
-        const y2 = Math.random()*crackCanvas.height;
+        const x0 = Math.random()*crackCanvas.width;
+        const y0 = Math.random()*crackCanvas.height;
+        const steps = 3 + Math.floor(Math.random()*3);
         ctx.strokeStyle = "rgba(0,0,0,0.5)";
         ctx.lineWidth = 1.5;
         ctx.beginPath();
-        ctx.moveTo(x1,y1);
-        ctx.lineTo(x2,y2);
+        ctx.moveTo(x0,y0);
+        let x = x0, y = y0;
+        for(let s=0; s<steps; s++){
+            x += (Math.random()-0.5)*20;
+            y += (Math.random()-0.5)*20;
+            ctx.lineTo(x,y);
+        }
         ctx.stroke();
     }
 }

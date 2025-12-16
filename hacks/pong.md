@@ -193,8 +193,8 @@ if (this.ball.position.y > paddleCenterY) {
     this.paddleRight.move(this.paddleRight.speed); // Move Down
 }   else if (this.ball.position.y < paddleCenterY) {
     this.paddle.centerY = Config.canvas.height / 2;
-    if (this.ball.position.y > centerY) {this.paddleRight.move(this.paddleRight.speed * 4)}
-    else {this.paddleRight.move(-this.paddleRight.speed * 4);}
+    if (this.ball.position.y > centerY) {this.paddleRight.move(this.paddleRight.speed)}
+    else {this.paddleRight.move(-this.paddleRight.speed);}
 paddleRight.move(-this.paddleRight.speed); // Move Up
 }
 let a = 0.5

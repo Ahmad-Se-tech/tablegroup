@@ -118,3 +118,40 @@ const cookiesEl = document.getElementById("cookies");
 const highScoreEl = document.getElementById("highScore");
 const perClickEl = document.getElementById("perClick");
 const perSecondEl = document.getElementById("perSecond");
+
+/* -------------------- RENDER -------------------- */
+function render() {
+    cookiesEl.textContent = Math.floor(player.cookies);
+    perClickEl.textContent = player.perClick;
+    perSecondEl.textContent = player.perSecond;
+    highScoreEl.textContent = highScore;
+
+    // Shop
+    shopEl.innerHTML = "";
+    upgrades.forEach(u=>{
+        const btn = document.createElement("button");
+        btn.textContent = `${u.name} (${u.cost}) [Owned: ${u.owned}]`;
+        btn.disabled = player.cookies < u.cost;
+        btn.onclick = ()=>{
+            if(player.cookies >= u.cost){
+                player.cookies -= u.cost;
+                u.owned++;
+                u.cost = Math.floor(u.cost * 1.5);
+                if(u.type==="click") player.perClick += u.effect;
+                else player.perSecond += u.effect;
+                saveGame();
+                render();
+            }
+        };
+        shopEl.appendChild(btn);
+    });
+
+    // Achievements
+    achEl.innerHTML = "";
+    achievements.forEach(a=>{
+        if(!a.unlocked && a.condition(player)) a.unlocked = true;
+        const li = document.createElement("li");
+        li.textContent = a.unlocked ? `✅ ${a.name}` : `🔒 ${a.name}`;
+        achEl.appendChild(li);
+    });
+}

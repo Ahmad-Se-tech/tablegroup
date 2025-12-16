@@ -40,7 +40,7 @@ comments: True
   
   /* Position the line in the center of the element */
   background-position: center; 
-}
+ }
   #restartBtn {
     display: none;
     margin-top: 15px;

@@ -38,36 +38,22 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
             Snake Game
         </div>
     </a>
-    <a href="{{site.baseurl}}/turtle" style="text-decoration: none;">
-        <div style="background-color: #FF0000; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
-            Turtle
         </div>
     </a>
      <a href="{{site.baseurl}}/connect4" style="text-decoration: none;">
-        <div style="background-color: #ccff00ff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+        <div style="background-color: #b4ce4bff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
             Connect 4
-        </div>
-    </a>
-    <a href="{{site.baseurl}}/tictactoe" style="text-decoration: none;">
-        <div style="background-color: #e70909ff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
-            Tic Tac Toe
-            </div>
+        </div>   
     </a>
     <a href="{{site.baseurl}}/breakout" style="text-decoration: none;">
         <div style="background-color: #3e6cbdff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
             Breakout
         </div>
     </a>
-    <a href="{{site.baseurl}}/rock-paper-scissor" style="text-decoration: none;">
-        <div style="background-color: #8e3ebdff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
-            Rock Paper Scissors
-        </div>
-    </a>
-    <a href="{{site.baseurl}}/custompong" style="text-decoration: none;">
-        <div style="background-color: #FF1493; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
-            Ping Pong
+     <a href="{{site.baseurl}}/cookie-clicker" style="text-decoration: none;">
+        <div style="background-color: #28300aff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+            Cookie Clicker
         </div> 
-    </a>
 </div>
 
 <br>

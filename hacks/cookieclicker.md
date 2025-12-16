@@ -88,14 +88,23 @@ button:disabled {
     100% { transform: translateY(-50px); opacity:0; }
 }
 
+/* Floating Reset Button */
 #reset-high {
-    background: #d9534f !important;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #d9534f;
     color: white;
-    margin-top: 15px;
     padding: 12px 20px;
     font-size: 16px;
     border-radius: 10px;
     font-weight: bold;
+    z-index: 1000;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+#reset-high:hover {
+    background: #c9302c;
 }
 </style>
 
@@ -112,7 +121,6 @@ button:disabled {
     <div class="panel">
         <h3>🛒 Shop</h3>
         <div id="shop"></div>
-        <button id="reset-high">Reset High Score</button>
     </div>
 
     <div class="panel">
@@ -120,6 +128,9 @@ button:disabled {
         <ul id="achievements"></ul>
     </div>
 </div>
+
+<!-- Floating Reset High Score Button -->
+<button id="reset-high">Reset High Score</button>
 
 <script>
 // -------------------- STATE --------------------

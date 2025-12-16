@@ -88,20 +88,21 @@ button:disabled {
     100% { transform: translateY(-50px); opacity:0; }
 }
 
-/* Floating Reset Button */
+/* Reset button inline with High Score */
 #reset-high {
-    position: fixed;
-    top: 20px;
-    right: 20px;
+    display: inline-block;
     background: #d9534f;
     color: white;
-    padding: 12px 20px;
-    font-size: 16px;
-    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 8px;
     font-weight: bold;
-    z-index: 1000;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    margin-left: 10px;
     cursor: pointer;
+    vertical-align: middle;
+    border: none;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    transition: background 0.2s, transform 0.1s;
 }
 #reset-high:hover {
     background: #c9302c;
@@ -110,7 +111,11 @@ button:disabled {
 
 <div class="game">
     <h2>🍪 Cookie Clicker</h2>
-    <h3>Cookies: <span id="cookies">0</span> | High Score: <span id="highScore">0</span></h3>
+    <h3>
+      Cookies: <span id="cookies">0</span> | 
+      High Score: <span id="highScore">0</span>
+      <button id="reset-high">Reset High Score</button>
+    </h3>
     <p>Per Click: <span id="perClick">1</span> | Per Second: <span id="perSecond">0</span></p>
 
     <div id="cookie-container">
@@ -128,9 +133,6 @@ button:disabled {
         <ul id="achievements"></ul>
     </div>
 </div>
-
-<!-- Floating Reset High Score Button -->
-<button id="reset-high">Reset High Score</button>
 
 <script>
 // -------------------- STATE --------------------

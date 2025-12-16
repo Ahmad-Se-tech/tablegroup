@@ -61,7 +61,7 @@ const Config = {
     p1Up: "w", p1Down: "s",
     p2Up: "i", p2Down: "k"
   },
-  visuals: { bg: "#000", fg: "#fff", text: "#fff", gameOver: "red", win: "yellow" }
+  visuals: { bg: "#155dc9ff", fg: "#fff", text: "#fff", gameOver: "red", win: "yellow" }
 };
 
 // Basic vector helper for clarity

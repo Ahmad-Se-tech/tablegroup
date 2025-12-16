@@ -161,7 +161,7 @@ class Game {
     this.paddleLeft = new Paddle(0, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height, imagePath);
     this.paddleRight = new Paddle(Config.canvas.width - width, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height, imagePath);
     this.ball = new Ball(Config.ball.radius, Config.canvas.width, Config.canvas.height);
-
+    this.imagePath = imagePath
     // Rules/state
     this.scores = { p1: 0, p2: 0 };
     this.gameOver = false;

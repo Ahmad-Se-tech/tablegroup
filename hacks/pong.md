@@ -32,7 +32,7 @@ comments: True
     font-size: 18px;
     border: none;
     border-radius: 6px;
-    background: #4caf50;
+    background: #0048ffff;
     color: white;
     cursor: pointer;
   }
@@ -61,7 +61,7 @@ const Config = {
     p1Up: "w", p1Down: "s",
     p2Up: "i", p2Down: "k"
   },
-  visuals: { bg: "#155dc9ff", fg: "#fff", text: "#fff", gameOver: "red", win: "yellow" }
+  visuals: { bg: "#000", fg: "#fff", text: "#fff", gameOver: "red", win: "yellow" }
 };
 
 // Basic vector helper for clarity
@@ -192,7 +192,7 @@ let paddleCenterY = this.paddleRight.position.y + (this.paddleRight.height / 2);
 if (this.ball.position.y > paddleCenterY) {
     this.paddleRight.move(this.paddleRight.speed); // Move Down
 } else if (this.ball.position.y < paddleCenterY) {
-    this.palet centerY = Config.canvas.height / 2;
+    this.paddle.centerY = Config.canvas.height / 2;
     if (this.ball.position.y > centerY) {this.paddleRight.move(this.paddleRight.speed * 4)}
     else {this.paddleRight.move(-this.paddleRight.speed * 4);}
 ddleRight.move(-this.paddleRight.speed); // Move Up

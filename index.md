@@ -38,7 +38,7 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
     <div style="background-color: #6ca537ff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
          onmouseover="this.style.backgroundColor='#d0e86b';" 
          onmouseout="this.style.backgroundColor='#6ca537ff';">
-        Connect 4
+        Snake
     </div>   
   </a>
 

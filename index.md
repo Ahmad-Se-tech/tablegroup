@@ -57,9 +57,6 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
         Cookie Clicker
     </div>
   </a>
-
-
-
 </div>
 
 

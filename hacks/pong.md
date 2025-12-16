@@ -197,9 +197,6 @@ if (this.ball.position.y > paddleCenterY) {
     else {this.paddleRight.move(-this.paddleRight.speed);}
 paddleRight.move(-this.paddleRight.speed); // Move Up
 }
-let a = 0.5
-let b = Math.pow(0.25, this.scores.p2);
-if (this.scores.p2 > 0) {this.paddleRight.speed * b} // 1 line designed to slow ai down as it gets more points}
   }
 
   update() {

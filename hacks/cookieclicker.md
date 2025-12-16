@@ -110,3 +110,11 @@ let achievements = [
     {name:"Cookie Factory", condition: p => p.perSecond >= 10, unlocked:false}
 ];
 
+/* -------------------- ELEMENTS -------------------- */
+const cookieEl = document.getElementById("cookie");
+const shopEl = document.getElementById("shop");
+const achEl = document.getElementById("achievements");
+const cookiesEl = document.getElementById("cookies");
+const highScoreEl = document.getElementById("highScore");
+const perClickEl = document.getElementById("perClick");
+const perSecondEl = document.getElementById("perSecond");

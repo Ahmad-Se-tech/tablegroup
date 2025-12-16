@@ -32,30 +32,34 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
 
 > Here is my progress through coding, click to see these online
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    <a href="{{site.baseurl}}/snake" style="text-decoration: none;">
-        <div style="background-color: #00FF00; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
-            Snake Game
-        </div>
-    </a>
-        </div>
-    </a>
-     <a href="{{site.baseurl}}/connect4" style="text-decoration: none;">
-        <div style="background-color: #b4ce4bff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
-            Connect 4
-        </div>   
-    </a>
-    <a href="{{site.baseurl}}/cookie-clicker" style="text-decoration: none;">
-        <div style="background-color: #3e6cbdff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
-            Cookie Clicker
-        </div></a>
-     <a href="{{site.baseurl}}/breakout" style="text-decoration: none;">
-        <div style="background-color: #b4ce4bff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
-            Break Out
-        </div>   
-    </a>
-   
+<div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
+
+  <a href="/tablegroup/connect4" style="text-decoration: none;">
+    <div style="background-color: #b4ce4bff; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
+         onmouseover="this.style.backgroundColor='#d0e86b';" 
+         onmouseout="this.style.backgroundColor='#b4ce4bff';">
+        Connect 4
+    </div>   
+  </a>
+
+  <a href="/tablegroup/breakout" style="text-decoration: none;">
+    <div style="background-color: #3e6cbdff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
+         onmouseover="this.style.backgroundColor='#5a82e0';" 
+         onmouseout="this.style.backgroundColor='#3e6cbdff';">
+        Breakout
+    </div>
+  </a>
+
+  <a href="/tablegroup/cookie-clicker" style="text-decoration: none;">
+    <div style="background-color: #28300aff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
+         onmouseover="this.style.backgroundColor='#404b7a';" 
+         onmouseout="this.style.backgroundColor='#28300aff';">
+        Cookie Clicker
+    </div>
+  </a>
+
 </div>
+
 
 <br>
 

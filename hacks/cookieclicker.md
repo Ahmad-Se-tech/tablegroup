@@ -74,3 +74,39 @@ button:disabled {
     100% { transform: translateY(-50px); opacity:0; }
 }
 </style>
+
+<div class="game">
+    <h2>🍪 Cookie Clicker</h2>
+    <h3>Cookies: <span id="cookies">0</span> | High Score: <span id="highScore">0</span></h3>
+    <p>Per Click: <span id="perClick">1</span> | Per Second: <span id="perSecond">0</span></p>
+
+    <div id="cookie">🍪</div>
+
+    <div class="panel">
+        <h3>🛒 Shop</h3>
+        <div id="shop"></div>
+    </div>
+
+    <div class="panel">
+        <h3>🏆 Achievements</h3>
+        <ul id="achievements"></ul>
+    </div>
+</div>
+
+<script>
+/* -------------------- GAME STATE -------------------- */
+let player = JSON.parse(localStorage.getItem("cookie_clicker")) || {cookies:0, perClick:1, perSecond:0};
+let highScore = Number(localStorage.getItem("cookie_clicker_high")) || 0;
+
+let upgrades = [
+    {name:"🖱 Cursor", cost:10, effect:1, type:"click", owned:0},
+    {name:"👵 Grandma", cost:25, effect:1, type:"auto", owned:0},
+    {name:"🏭 Factory", cost:100, effect:5, type:"auto", owned:0}
+];
+
+let achievements = [
+    {name:"First Cookie", condition: p => p.cookies >= 1, unlocked:false},
+    {name:"100 Cookies", condition: p => p.cookies >= 100, unlocked:false},
+    {name:"Cookie Factory", condition: p => p.perSecond >= 10, unlocked:false}
+];
+

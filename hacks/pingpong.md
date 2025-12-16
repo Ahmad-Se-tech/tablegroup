@@ -1,4 +1,3 @@
----
 layout: post
 title: 🏓 Complete Pong Game Code Implementation
 description: Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game
@@ -53,7 +52,7 @@ comments: True
 // -----------------------------
 const Config = {
   canvas: { width: 800, height: 500 },
-  paddle: { imagePath: "/images/pingpong/happymort.png", width: 20, height: 120, speed:7 },
+  paddle: { width: 10, height: 100, speed: 7 },
   ball: { radius: 10, baseSpeedX: 5, maxRandomY: 2, spinFactor: 0.3 },
   rules: { winningScore: 10 },
   keys: {
@@ -61,7 +60,7 @@ const Config = {
     p1Up: "w", p1Down: "s",
     p2Up: "i", p2Down: "k"
   },
-  visuals: { bg: "#000", fg: "#fff", text: "#fff", gameOver: "red", win: "green" }
+  visuals: { bg: "#000", fg: "#fff", text: "#fff", gameOver: "red", win: "yellow" }
 };
 
 // Basic vector helper for clarity
@@ -70,13 +69,12 @@ class Vector2 {
 }
 
 class Paddle {
-  constructor(x, y, width, height, speed, boundsHeight, imagePath) {
+  constructor(x, y, width, height, speed, boundsHeight) {
     this.position = new Vector2(x, y);
     this.width = width;
     this.height = height;
     this.speed = speed;
     this.boundsHeight = boundsHeight;
-    this.imagePath = imagePath
   }
   move(dy) {
     this.position.y = Math.min(
@@ -85,10 +83,6 @@ class Paddle {
     );
   }
   rect() { return { x: this.position.x, y: this.position.y, w: this.width, h: this.height }; }
-  draw(ctx) {
-    ctx.fillStyle = "#fff"; // Set the color to white (from Config.visuals.fg)
-    ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-}
 }
 
 class Ball {
@@ -161,11 +155,11 @@ class Game {
     this.input = new Input();
 
     // Entities
-    const { imagePath, width, height, speed, imagePath} = Config.paddle;
-    this.paddleLeft = new Paddle(0, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height, imagePath);
-    this.paddleRight = new Paddle(Config.canvas.width - width, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height, imagePath);
+    const { width, height, speed } = Config.paddle;
+    this.paddleLeft = new Paddle(0, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height);
+    this.paddleRight = new Paddle(Config.canvas.width - width, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height);
     this.ball = new Ball(Config.ball.radius, Config.canvas.width, Config.canvas.height);
-    this.imagePath = imagePath
+
     // Rules/state
     this.scores = { p1: 0, p2: 0 };
     this.gameOver = false;
@@ -290,3 +284,4 @@ game.loop();
 // 5) Power-ups: occasionally spawn a small rectangle; when ball hits it, apply effect (bigger paddle? faster ball?).
 // 6) Pause/Resume: map a key to toggle pause state in Game and skip updates when paused.
 // 7) Win screen polish: show a replay countdown, then auto-restart.
+</script>

@@ -3,7 +3,7 @@ title: Cookie Clicker
 comments: true
 hide: true
 layout: opencs
-description: play cookie clicker when you are bored or for funnn!!
+description: play cookie clicker when you are bored or for fun!!
 permalink: /cookie-clicker/
 ---
 
@@ -180,3 +180,37 @@ cookieEl.onclick = () => {
     saveGame();
     render();
 };
+
+/* -------------------- FLOATING NUMBERS -------------------- */
+function showFloating(text){
+    const span = document.createElement("span");
+    span.textContent = text;
+    span.className = "floating";
+    span.style.left = (cookieEl.offsetLeft + cookieEl.offsetWidth/2 + (Math.random()*40-20)) + "px";
+    span.style.top = (cookieEl.offsetTop - 20 + (Math.random()*10-5)) + "px";
+    document.body.appendChild(span);
+    setTimeout(()=>span.remove(),1000);
+}
+
+/* -------------------- AUTO-CLICKER -------------------- */
+setInterval(()=>{
+    if(player.perSecond>0){
+        player.cookies += player.perSecond;
+        showFloating("+"+player.perSecond);
+        if(player.cookies > highScore){
+            highScore = Math.floor(player.cookies);
+            localStorage.setItem("cookie_clicker_high", highScore);
+        }
+        saveGame();
+        render();
+    }
+},1000);
+
+/* -------------------- SAVE -------------------- */
+function saveGame(){
+    localStorage.setItem("cookie_clicker", JSON.stringify(player));
+}
+
+/* -------------------- INITIALIZE -------------------- */
+render();
+</script>

@@ -3,7 +3,7 @@ title: Cookie Clicker
 comments: true
 hide: true
 layout: opencs
-description: Play Cookie Clicker when you are bored or for fun!!
+description: Play Cookie Clicker when bored or for fun!
 permalink: /cookie-clicker/
 ---
 
@@ -218,26 +218,48 @@ cookieEl.onclick = () => {
     render();
 };
 
-// -------------------- REALISTIC CRACKS --------------------
+// -------------------- CRACKS INSIDE COOKIE --------------------
 function drawCracks(){
+    const radius = crackCanvas.width/2;
+    const centerX = radius;
+    const centerY = radius;
+
     const numCracks = 3 + Math.floor(Math.random()*3);
+
     for(let i=0;i<numCracks;i++){
-        const x0 = Math.random()*crackCanvas.width;
-        const y0 = Math.random()*crackCanvas.height;
+        let angle = Math.random()*2*Math.PI;
+        let r = Math.random()*radius*0.8; // inside cookie
+        let x0 = centerX + r*Math.cos(angle);
+        let y0 = centerY + r*Math.sin(angle);
+
         const steps = 3 + Math.floor(Math.random()*3);
         ctx.strokeStyle = "rgba(0,0,0,0.5)";
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(x0,y0);
+
         let x = x0, y = y0;
         for(let s=0; s<steps; s++){
-            x += (Math.random()-0.5)*20;
-            y += (Math.random()-0.5)*20;
+            let stepAngle = Math.random()*2*Math.PI;
+            let stepR = Math.random()*15;
+            x += stepR*Math.cos(stepAngle);
+            y += stepR*Math.sin(stepAngle);
+
+            // keep inside circle
+            let dx = x-centerX;
+            let dy = y-centerY;
+            let dist = Math.sqrt(dx*dx+dy*dy);
+            if(dist>radius) {
+                x = centerX + dx/dist*radius;
+                y = centerY + dy/dist*radius;
+            }
+
             ctx.lineTo(x,y);
         }
         ctx.stroke();
     }
 }
+
 function clearCracks(){
     ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height);
 }
@@ -270,6 +292,7 @@ setInterval(()=>{
 resetHighBtn.onclick = ()=>{
     localStorage.setItem("cookie_clicker_high", 0);
     highScore = 0;
+    clearCracks();
     render();
 };
 

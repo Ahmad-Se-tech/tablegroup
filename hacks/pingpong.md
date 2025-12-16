@@ -184,11 +184,16 @@ class Game {
     if (this.input.isDown(Config.keys.p1Up)) this.paddleLeft.move(-this.paddleLeft.speed);
     if (this.input.isDown(Config.keys.p1Down)) this.paddleLeft.move(this.paddleLeft.speed);
     // Player 2 controls (human). Swap to AI per TODO above.
-    if (this.input.isDown(Config.keys.p2Up)) this.paddleRight.move(-this.paddleRight.speed);
-    if (this.input.isDown(Config.keys.p2Down)) this.paddleRight.move(this.paddleRight.speed);
-    if (this.ball.position.y > centerY) {this.paddleRight.move(this.paddleRight.speed);
-    } else {this.paddleRight.move(this.paddleRight.speed)}
+    // This is what the AI should likely be doing
+    if (this.ball.position.y > this.paddleRight.position.y) {
+        // If the ball is below the paddle, move down
+        this.paddleRight.move(this.paddleRight.speed);
+    } else if (this.ball.position.y < this.paddleRight.position.y) {
+        // If the ball is above the paddle, move up
+        this.paddleRight.move(-this.paddleRight.speed);
     }
+    // Note: An actual game would likely disable user input for the paddle 
+    // when the AI takes over, which isn't done here.
 
   update() {
     if (this.gameOver) return;

@@ -155,3 +155,28 @@ function render() {
         achEl.appendChild(li);
     });
 }
+
+/* -------------------- COOKIE CLICK -------------------- */
+cookieEl.onclick = () => {
+    let gain = player.perClick;
+
+    // Random golden cookie: 20% chance for 5x cookies
+    if(Math.random() < 0.2){
+        gain *= 5;
+        showFloating("+💛"+gain);
+    } else {
+        showFloating("+"+gain);
+    }
+
+    player.cookies += gain;
+    cookieEl.style.transform = "scale(0.9)";
+    setTimeout(()=>cookieEl.style.transform="scale(1)",100);
+
+    if(player.cookies > highScore){
+        highScore = Math.floor(player.cookies);
+        localStorage.setItem("cookie_clicker_high", highScore);
+    }
+
+    saveGame();
+    render();
+};

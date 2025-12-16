@@ -183,8 +183,9 @@ class Game {
     if (this.input.isDown(Config.keys.p1Up)) this.paddleLeft.move(-this.paddleLeft.speed);
     if (this.input.isDown(Config.keys.p1Down)) this.paddleLeft.move(this.paddleLeft.speed);
     // Player 2 controls (huma😭n). Swap to AI per TODO above.
-    if (this.input.isDown(Config.keys.p2Up)) this.paddleRight.move(-this.paddleRight.speed);
-    if (this.input.isDown(Config.keys.p2Down)) this.paddleRight.move(this.paddleRight.speed);
+    let centerY = Config.canvas.height / 2;
+    if (this.ball.position.y > centerY) {this.paddleRight.move(this.paddleRight.speed)}
+    else {this.paddleRight.move(-this.paddleRight.speed);}
   }
 
   update() {

@@ -479,3 +479,6 @@ if (brickPicker) {
   });
 }
 </script>
+
+render();
+</script>

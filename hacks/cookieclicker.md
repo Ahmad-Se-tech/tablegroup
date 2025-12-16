@@ -88,7 +88,6 @@ button:disabled {
     100% { transform: translateY(-50px); opacity:0; }
 }
 
-/* Reset button inline with High Score */
 #reset-high {
     display: inline-block;
     background: #d9534f;
@@ -110,7 +109,7 @@ button:disabled {
 
 /* Achievements smaller font */
 .panel ul#achievements {
-    font-size: 14px;
+    font-size: 12px;
     margin: 0;
     padding-left: 20px;
     max-height: 150px;
@@ -147,14 +146,17 @@ button:disabled {
         <canvas id="cookie-crack"></canvas>
     </div>
 
-    <div class="panel">
-        <h3>🛒 Shop</h3>
-        <div id="shop"></div>
-    </div>
+    <!-- Side by side Shop and Achievements -->
+    <div class="panel-container" style="display:flex; gap:15px; justify-content:center; flex-wrap: wrap;">
+        <div class="panel" style="flex:1; min-width:200px;">
+            <h3>🛒 Shop</h3>
+            <div id="shop"></div>
+        </div>
 
-    <div class="panel">
-        <h3>🏆 Achievements</h3>
-        <ul id="achievements"></ul>
+        <div class="panel" style="flex:1; min-width:200px;">
+            <h3>🏆 Achievements</h3>
+            <ul id="achievements"></ul>
+        </div>
     </div>
 </div>
 

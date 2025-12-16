@@ -141,7 +141,7 @@ class Renderer {
   }
   text(t, x, y, color = Config.visuals.text) {
     this.ctx.fillStyle = color;
-    this.ctx.font = "30px Verdana";
+    this.ctx.font = "30px Arial";
     this.ctx.fillText(t, x, y);
   }
 }
@@ -161,7 +161,6 @@ class Game {
     this.paddleLeft = new Paddle(0, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height);
     this.paddleRight = new Paddle(Config.canvas.width - width, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height);
     this.ball = new Ball(Config.ball.radius, Config.canvas.width, Config.canvas.height);
-    
 
     // Rules/state
     this.scores = { p1: 0, p2: 0 };
@@ -185,16 +184,9 @@ class Game {
     if (this.input.isDown(Config.keys.p1Up)) this.paddleLeft.move(-this.paddleLeft.speed);
     if (this.input.isDown(Config.keys.p1Down)) this.paddleLeft.move(this.paddleLeft.speed);
     // Player 2 controls (human). Swap to AI per TODO above.
-    // This is what the AI should likely be doing
-    if (this.ball.position.y > this.paddleRight.position.y) {
-        // If the ball is below the paddle, move down
-        this.paddleRight.move(-this.paddleRight.speed);
-    } else if (this.ball.position.y < this.paddleRight.position.y) {
-        // If the ball is above the paddle, move up
-        this.paddleRight.move(this.paddleRight.speed);
-    }
-    // Note: An actual game would likely disable user input for the paddle 
-    // when the AI takes over, which isn't done here.
+    if (this.input.isDown(Config.keys.p2Up)) this.paddleRight.move(-this.paddleRight.speed);
+    if (this.input.isDown(Config.keys.p2Down)) this.paddleRight.move(this.paddleRight.speed);
+  }
 
   update() {
     if (this.gameOver) return;

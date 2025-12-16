@@ -85,6 +85,10 @@ class Paddle {
     );
   }
   rect() { return { x: this.position.x, y: this.position.y, w: this.width, h: this.height }; }
+  draw(ctx) {
+    ctx.fillStyle = "#fff"; // Set the color to white (from Config.visuals.fg)
+    ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+}
 }
 
 class Ball {

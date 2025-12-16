@@ -137,6 +137,7 @@ button:disabled {
 // -------------------- STATE --------------------
 let highScore = Number(localStorage.getItem("cookie_clicker_high")) || 0;
 let player = {cookies:0, perClick:1, perSecond:0};
+let crumbs = []; // falling cookie bits
 
 let upgrades = [
     {name:"🖱 Cursor", cost:10, effect:1, type:"click", owned:0},
@@ -241,6 +242,43 @@ function showFloating(text){
     setTimeout(()=>cookieSpan.remove(),1200);
 }
 
+// -------------------- COOKIE CRUMBS --------------------
+function spawnCrumbs(){
+    const rect = cookieEl.getBoundingClientRect();
+    const numCrumbs = 3 + Math.floor(Math.random()*3);
+    for(let i=0;i<numCrumbs;i++){
+        crumbs.push({
+            x: rect.left + rect.width/2 + (Math.random()*50-25),
+            y: rect.top + rect.height/2 + (Math.random()*20-10),
+            size: 4 + Math.random()*4,
+            dx: (Math.random()*2-1),
+            dy: -1 - Math.random()*2,
+            opacity: 1
+        });
+    }
+}
+
+function renderCrumbs(){
+    crumbs.forEach(c=>{
+        const crumbEl = document.createElement("span");
+        crumbEl.textContent = "•";
+        crumbEl.style.position = "absolute";
+        crumbEl.style.left = c.x + "px";
+        crumbEl.style.top = c.y + "px";
+        crumbEl.style.fontSize = c.size + "px";
+        crumbEl.style.color = "saddlebrown";
+        crumbEl.style.opacity = c.opacity;
+        crumbEl.style.pointerEvents = "none";
+        document.body.appendChild(crumbEl);
+
+        c.x += c.dx;
+        c.y += c.dy;
+        c.dy += 0.05;
+        c.opacity -= 0.02;
+    });
+    crumbs = crumbs.filter(c => c.opacity > 0);
+}
+
 // -------------------- RENDER --------------------
 function render() {
     cookiesEl.textContent = Math.floor(player.cookies);
@@ -261,6 +299,7 @@ function render() {
                 u.cost = Math.floor(u.cost*1.5);
                 if(u.type==="click") player.perClick += u.effect;
                 else player.perSecond += u.effect;
+                crumbs = [];
                 clearCracks();
                 render();
             }
@@ -276,18 +315,18 @@ function render() {
         li.textContent = a.unlocked ? `✅ ${a.name}` : `🔒 ${a.name}`;
         achEl.appendChild(li);
     });
-
-    drawCracks();
 }
 
-// -------------------- COOKIE CLICK --------------------
+// -------------------- CLICK HANDLER --------------------
 cookieEl.onclick = ()=>{
     player.cookies += player.perClick;
-    drawCracks();
     showFloating("+"+player.perClick);
+    spawnCrumbs();
 
     cookieEl.style.transform = "scale(0.9)";
     setTimeout(()=>cookieEl.style.transform="scale(1)",100);
+
+    drawCracks();
 
     if(player.cookies > highScore){
         highScore = Math.floor(player.cookies);
@@ -314,9 +353,12 @@ resetHighBtn.onclick = ()=>{
     localStorage.setItem("cookie_clicker_high",0);
     highScore = 0;
     highScoreEl.textContent = highScore;
+    crumbs = [];
     clearCracks();
 };
 
+// -------------------- CRUMBS LOOP --------------------
+setInterval(renderCrumbs, 30);
+
 // -------------------- INITIALIZE --------------------
 render();
-</script>

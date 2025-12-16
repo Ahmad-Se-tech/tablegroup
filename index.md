@@ -78,7 +78,7 @@ Hi! Our names are Ahmad, Rohan, Warren, Finn, and Matt!
     <div style="background-color: #127492ff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
          onmouseover="this.style.backgroundColor='#404b7a';" 
          onmouseout="this.style.backgroundColor='#127492ff';">
-        Rock Paper Scissors
+        Ping Pong
     </div>
   </a>
 </div>

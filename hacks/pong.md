@@ -53,7 +53,7 @@ comments: True
 // -----------------------------
 const Config = {
   canvas: { width: 800, height: 500 },
-  paddle: { width: 10, height: 100, speed: 7 },
+  paddle: { width: 10, height: 120, speed: 7 },
   ball: { radius: 10, baseSpeedX: 5, maxRandomY: 2, spinFactor: 0.3 },
   rules: { winningScore: 10 },
   keys: {
@@ -140,7 +140,7 @@ class Renderer {
   }
   text(t, x, y, color = Config.visuals.text) {
     this.ctx.fillStyle = color;
-    this.ctx.font = "30px Arial";
+    this.ctx.font = "30px Verdana";
     this.ctx.fillText(t, x, y);
   }
 }
@@ -182,10 +182,21 @@ class Game {
     // Player 1 controls
     if (this.input.isDown(Config.keys.p1Up)) this.paddleLeft.move(-this.paddleLeft.speed);
     if (this.input.isDown(Config.keys.p1Down)) this.paddleLeft.move(this.paddleLeft.speed);
-    // Player 2 controls (huma😭n). Swap to AI per TODO above.
+    // Player 2 controls (human). Swap to AI per TODO above.
     let centerY = Config.canvas.height / 2;
-    if (this.ball.position.y > centerY) {this.paddleRight.move(this.paddleRight.speed * 2)}
-    else {this.paddleRight.move(-this.paddleRight.speed * 2);}
+    if (this.ball.position.y > centerY) {this.paddleRight.move(this.paddleRight.speed * 4)}
+    else {this.paddleRight.move(-this.paddleRight.speed * 4);}
+    // Calculate the center of the paddle 
+let paddleCenterY = this.paddleRight.position.y + (this.paddleRight.height / 2);
+// Compare the ball's center to the paddle's center
+if (this.ball.position.y > paddleCenterY) {
+    this.paddleRight.move(this.paddleRight.speed); // Move Down
+} else if (this.ball.position.y < paddleCenterY) {
+    this.paddleRight.move(-this.paddleRight.speed); // Move Up
+}
+let a = 0.25
+let b = Math.pow(0.25, this.scores.p2);
+if (this.scores.p2 > 0) {this.paddleRight.speed * b} // 1 line designed to slow ai down as it gets more points}
   }
 
   update() {

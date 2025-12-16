@@ -12,7 +12,7 @@ body {
     background: linear-gradient(180deg, #f3e2c7, #c9a66b);
     font-family: system-ui, sans-serif;
     text-align: center;
-    overflow: hidden; /* So background cookies don't create scrollbars */
+    overflow: hidden;
 }
 
 .game {
@@ -23,17 +23,27 @@ body {
     z-index: 2;
 }
 
+#cookie-container {
+    position: relative;
+    display: inline-block;
+}
+
 #cookie {
     font-size: 90px;
     cursor: pointer;
     user-select: none;
     transition: transform 0.1s;
-    display: block;
-    margin: 20px auto;
 }
 
 #cookie:active {
     transform: scale(0.9);
+}
+
+#cookie-crack {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
 }
 
 .panel {
@@ -100,11 +110,15 @@ button:disabled {
     <h3>Cookies: <span id="cookies">0</span> | High Score: <span id="highScore">0</span></h3>
     <p>Per Click: <span id="perClick">1</span> | Per Second: <span id="perSecond">0</span></p>
 
-    <div id="cookie">🍪</div>
+    <div id="cookie-container">
+        <div id="cookie">🍪</div>
+        <canvas id="cookie-crack" width="90" height="90"></canvas>
+    </div>
 
     <div class="panel">
         <h3>🛒 Shop</h3>
         <div id="shop"></div>
+        <button id="reset-high">Reset High Score</button>
     </div>
 
     <div class="panel">
@@ -115,15 +129,15 @@ button:disabled {
 
 <script>
 /* -------------------- GAME STATE -------------------- */
-let player = JSON.parse(localStorage.getItem("cookie_clicker")) || {cookies:0, perClick:1, perSecond:0};
 let highScore = Number(localStorage.getItem("cookie_clicker_high")) || 0;
 
+// Reset session cookies and upgrades every load
+let player = {cookies:0, perClick:1, perSecond:0};
 let upgrades = [
     {name:"🖱 Cursor", cost:10, effect:1, type:"click", owned:0},
     {name:"👵 Grandma", cost:25, effect:1, type:"auto", owned:0},
     {name:"🏭 Factory", cost:100, effect:5, type:"auto", owned:0}
 ];
-
 let achievements = [
     {name:"First Cookie", condition: p => p.cookies >= 1, unlocked:false},
     {name:"100 Cookies", condition: p => p.cookies >= 100, unlocked:false},
@@ -132,12 +146,15 @@ let achievements = [
 
 /* -------------------- ELEMENTS -------------------- */
 const cookieEl = document.getElementById("cookie");
+const crackCanvas = document.getElementById("cookie-crack");
+const ctx = crackCanvas.getContext("2d");
 const shopEl = document.getElementById("shop");
 const achEl = document.getElementById("achievements");
 const cookiesEl = document.getElementById("cookies");
 const highScoreEl = document.getElementById("highScore");
 const perClickEl = document.getElementById("perClick");
 const perSecondEl = document.getElementById("perSecond");
+const resetHighBtn = document.getElementById("reset-high");
 
 /* -------------------- RENDER -------------------- */
 function render() {
@@ -159,7 +176,7 @@ function render() {
                 u.cost = Math.floor(u.cost * 1.5);
                 if(u.type==="click") player.perClick += u.effect;
                 else player.perSecond += u.effect;
-                saveGame();
+                clearCracks(); // Reset cracks after purchase
                 render();
             }
         };
@@ -180,7 +197,6 @@ function render() {
 cookieEl.onclick = () => {
     let gain = player.perClick;
 
-    // Random golden cookie: 20% chance for 5x cookies
     if(Math.random() < 0.2){
         gain *= 5;
         showFloating("+💛"+gain);
@@ -189,6 +205,7 @@ cookieEl.onclick = () => {
     }
 
     player.cookies += gain;
+    drawCracks();
     cookieEl.style.transform = "scale(0.9)";
     setTimeout(()=>cookieEl.style.transform="scale(1)",100);
 
@@ -197,9 +214,29 @@ cookieEl.onclick = () => {
         localStorage.setItem("cookie_clicker_high", highScore);
     }
 
-    saveGame();
     render();
 };
+
+/* -------------------- DRAW CRACKS -------------------- */
+function drawCracks(){
+    const numCracks = 3 + Math.floor(Math.random()*3);
+    for(let i=0;i<numCracks;i++){
+        const x1 = Math.random()*crackCanvas.width;
+        const y1 = Math.random()*crackCanvas.height;
+        const x2 = Math.random()*crackCanvas.width;
+        const y2 = Math.random()*crackCanvas.height;
+        ctx.strokeStyle = "rgba(0,0,0,0.5)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(x1,y1);
+        ctx.lineTo(x2,y2);
+        ctx.stroke();
+    }
+}
+
+function clearCracks(){
+    ctx.clearRect(0,0,crackCanvas.width,crackCanvas.height);
+}
 
 /* -------------------- FLOATING NUMBERS -------------------- */
 function showFloating(text){
@@ -221,7 +258,6 @@ setInterval(()=>{
             highScore = Math.floor(player.cookies);
             localStorage.setItem("cookie_clicker_high", highScore);
         }
-        saveGame();
         render();
     }
 },1000);
@@ -239,10 +275,12 @@ function spawnCookieBg(){
 }
 setInterval(spawnCookieBg, 500);
 
-/* -------------------- SAVE -------------------- */
-function saveGame(){
-    localStorage.setItem("cookie_clicker", JSON.stringify(player));
-}
+/* -------------------- RESET HIGH SCORE -------------------- */
+resetHighBtn.onclick = () => {
+    localStorage.setItem("cookie_clicker_high", 0);
+    highScore = 0;
+    render();
+};
 
 /* -------------------- INITIALIZE -------------------- */
 render();

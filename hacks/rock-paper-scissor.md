@@ -185,6 +185,8 @@ permalink: /rock-paper-scissor/
     tie: null
   };
 
+
+
   function startBattle(winner, loser){
     battle.active = true;
     battle.tie = null;
@@ -273,6 +275,29 @@ permalink: /rock-paper-scissor/
   }
   render(); // kick off the engine once
 
+
+/**
+ * Plays an audio file once using the built-in Audio object.
+ *
+ * @param {string} filePath - The path to the audio file (e.g., 'sounds/win.mp3').
+ */
+function playSimpleSound(/assets/audio/hehehehaha.mp3) {
+    try {
+        const audio = new Audio(hehehehaha.mp3);
+        
+        // Reset and play the sound instantly
+        audio.currentTime = 0; 
+        audio.play()
+            .catch(error => {
+                // Catches the common error where the browser prevents audio 
+                // until the user interacts with the page (e.g., a click).
+                console.warn(`Browser blocked automatic audio play for: ${filePath}`, error);
+            });
+    } catch (e) {
+        console.error("Error creating audio object:", e);
+    }
+}
+
   // --- game logic + console entry point ---
   window.playRPS = function(playerChoice){
     const choices = ["rock","paper","scissors"];
@@ -298,6 +323,7 @@ permalink: /rock-paper-scissor/
     } else {
       resultText = "You Lose!";
       winner = computerChoice; loser = playerChoice;
+      playSimpleSound('/assets/audio/hehehehaha.mp3');
     }
 
     document.getElementById("resultBox").innerHTML = `

@@ -281,22 +281,23 @@ permalink: /rock-paper-scissor/
  *
  * @param {string} filePath - The path to the audio file (e.g., 'sounds/win.mp3').
  */
-function playSimpleSound(/assets/audio/hehehehaha.mp3) {
+function playSimpleSound(filePath) { 
     try {
-        const audio = new Audio(hehehehaha.mp3);
+        const audio = new Audio(filePath); 
         
-        // Reset and play the sound instantly
         audio.currentTime = 0; 
         audio.play()
             .catch(error => {
-                // Catches the common error where the browser prevents audio 
-                // until the user interacts with the page (e.g., a click).
-                console.warn(`Browser blocked automatic audio play for: ${filePath}`, error);
+                console.warn(`Browser blocked audio play for: ${filePath}`, error);
             });
     } catch (e) {
         console.error("Error creating audio object:", e);
     }
 }
+// ---------------------------------------------
+// Call the function later with the actual string:
+// playSimpleSound('/assets/audio/hehehehaha.mp3');
+
 
   // --- game logic + console entry point ---
   window.playRPS = function(playerChoice){
@@ -319,11 +320,11 @@ function playSimpleSound(/assets/audio/hehehehaha.mp3) {
       (playerChoice==="scissors" && computerChoice==="paper")
     ){
       resultText = "You Win!";
-      winner = playerChoice; loser = computerChoice;
+      winner = playerChoice; loser = computerChoice; playSimpleSound('hehehehaha.mp3');
     } else {
       resultText = "You Lose!";
       winner = computerChoice; loser = playerChoice;
-      playSimpleSound('/assets/audio/hehehehaha.mp3');
+
     }
 
     document.getElementById("resultBox").innerHTML = `

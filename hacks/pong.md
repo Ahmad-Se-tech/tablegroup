@@ -25,6 +25,7 @@ comments: True
     border: 10px solid #fff;
     background: #1e00ffff;
   }
+
   #restartBtn {
     display: none;
     margin-top: 15px;
@@ -53,7 +54,7 @@ comments: True
 // -----------------------------
 const Config = {
   canvas: { width: 800, height: 500 },
-  paddle: { width: 10, height: 100, speed: 7 },
+  paddle: { width: 10, height: 100, speed: 10},
   ball: { radius: 10, baseSpeedX: 5, maxRandomY: 2, spinFactor: 0.3 },
   rules: { winningScore: 10 },
   keys: {
@@ -184,24 +185,20 @@ handleInput() {
     if (this.input.isDown(Config.keys.p1Up)) this.paddleLeft.move(-this.paddleLeft.speed);
     if (this.input.isDown(Config.keys.p1Down)) this.paddleLeft.move(this.paddleLeft.speed);
 
-    // --- 2. Dynamic Speed Adjustment Logic (Combined and Corrected Syntax) ---
-    // If P1 scores > 1, slow down P1 and slightly speed up P2
-    if (this.scores.p1 > 1) {
-        // Must use Config.paddle.speed as the base to prevent compounding small changes every frame
-        this.paddleLeft.speed = 7 * Math.pow(0.95, this.scores.p1);
-    }
-    else {;}
-    
+    // --- 2. Dynamic Speed Adjustment Logic (Combined and Corrected Syntax) ---    
     // P2 Speed Adjustment (Combined Logic)
-    if (this.scores.p2 > 1) {
+    if (this.scores.p2 > this.scores.p1) {
         // Condition 1: P2 is winning, slow down P2 significantly (0.85)
-        this.paddleRight.speed = 7 * Math.pow(0.95, this.scores.p2);
+        this.paddleRight.speed = 10 * Math.pow(0.5, this.scores.p2);
     } 
-    else if (this.scores.p1 > 7) {
+    else if (this.scores.p1 > this.scores.p2) {
         // Condition 2: P1 is winning, speed up P2 slightly (1.005)
-        this.paddleRight.speed = 7 * Math.pow(1.005, this.scores.p1);
+        this.paddleRight.speed = 10 * Math.pow(2, this.scores.p1);
     } 
-    else {this.paddleRight.speed = 7}
+    else {this.paddleRight.speed = 10}
+    
+    if(this.paddleLeft.speed < 1) {this.paddleLeft.speed = 3}
+    else {;}
     // Note: The speed logic here runs every frame, which is inefficient but acceptable for now.
 
     // Player 2 Controls (Clean, Accurate AI Tracking) ---

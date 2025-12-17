@@ -1,22 +1,23 @@
----
-layout: post
-title: 🏓 Complete Pong Game Code Implementation
-description: Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game
-categories: ['Game Development', 'JavaScript', 'Canvas API', 'Code Implementation']
-permalink: /custompong
-menu: nav/tools_setup.html
-toc: True
-comments: True
----
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🏓 Complete Pong Game Code Implementation</title>
-  <meta name="description" content="Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game with difficulty settings">
+  <meta name="description" content="Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game">
   <style>
+    /*
+    ---
+    layout: post
+    title: 🏓 Complete Pong Game Code Implementation
+    description: Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game
+    categories: ['Game Development', 'JavaScript', 'Canvas API', 'Code Implementation']
+    permalink: /custompong
+    menu: nav/tools_setup.html
+    toc: True
+    comments: True
+    ---
+    */
     body {
       margin: 0;
       padding: 20px;
@@ -92,15 +93,6 @@ comments: True
   </style>
 </head>
 <body>
-  <!-- Header Section -->
-  <div style="text-align: center; margin-bottom: 10px;">
-    <h1 style="margin-bottom: 5px;">🏓 Complete Pong Game Code Implementation</h1>
-    <p style="color: #aaa; margin: 5px 0;">Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game</p>
-    <p style="color: #888; font-size: 14px; margin: 5px 0;">
-      <strong>Categories:</strong> Game Development | JavaScript | Canvas API | Code Implementation
-    </p>
-  </div>
-
   <h2 style="text-align: center; margin: 20px 0;">🎮 Pong Game Demo</h2>
   
   <div class="controls">

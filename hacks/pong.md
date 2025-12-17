@@ -1,3 +1,14 @@
+---
+layout: post
+title: 🏓 Complete Pong Game Code Implementation
+description: Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game
+categories: ['Game Development', 'JavaScript', 'Canvas API', 'Code Implementation']
+permalink: /custompong
+menu: nav/tools_setup.html
+toc: True
+comments: True
+---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

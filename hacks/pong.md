@@ -14,7 +14,8 @@ comments: True
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pong Game with Difficulty</title>
+  <title>🏓 Complete Pong Game Code Implementation</title>
+  <meta name="description" content="Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game with difficulty settings">
   <style>
     body {
       margin: 0;
@@ -91,7 +92,16 @@ comments: True
   </style>
 </head>
 <body>
-  <h1>🏓 Pong Game</h1>
+  <!-- Header Section -->
+  <div style="text-align: center; margin-bottom: 10px;">
+    <h1 style="margin-bottom: 5px;">🏓 Complete Pong Game Code Implementation</h1>
+    <p style="color: #aaa; margin: 5px 0;">Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game</p>
+    <p style="color: #888; font-size: 14px; margin: 5px 0;">
+      <strong>Categories:</strong> Game Development | JavaScript | Canvas API | Code Implementation
+    </p>
+  </div>
+
+  <h2 style="text-align: center; margin: 20px 0;">🎮 Pong Game Demo</h2>
   
   <div class="controls">
     <span class="difficulty-label">Difficulty:</span>
@@ -129,6 +139,14 @@ const Config = {
     easy: { speedMultiplier: 0.6, deadZone: 15 },
     medium: { speedMultiplier: 1.0, deadZone: 8 },
     hard: { speedMultiplier: 1.5, deadZone: 3 }
+  },
+  // NEW: Power-up settings
+  powerup: {
+    size: 20,
+    spawnChance: 0.4, // 40% chance to spawn after each point
+    duration: 10000, // 10 seconds in milliseconds
+    paddleSizeMultiplier: 1.25,
+    color: "#FFD700" // Gold color
   }
 };
 
@@ -145,12 +163,25 @@ class Paddle {
     this.speed = speed;
     this.baseSpeed = speed; // Store original speed
     this.boundsHeight = boundsHeight;
+    // NEW: Store original dimensions for power-up
+    this.baseWidth = width;
+    this.baseHeight = height;
   }
   move(dy) {
     this.position.y = Math.min(
       this.boundsHeight - this.height,
       Math.max(0, this.position.y + dy)
     );
+  }
+  // NEW: Method to apply power-up
+  applyPowerup(multiplier) {
+    this.width = this.baseWidth * multiplier;
+    this.height = this.baseHeight * multiplier;
+  }
+  // NEW: Method to reset to normal size
+  resetSize() {
+    this.width = this.baseWidth;
+    this.height = this.baseHeight;
   }
   rect() { return { x: this.position.x, y: this.position.y, w: this.width, h: this.height }; }
 }
@@ -178,6 +209,48 @@ class Ball {
     if (this.position.y + this.radius > this.boundsHeight || this.position.y - this.radius < 0) {
       this.velocity.y *= -1;
     }
+  }
+}
+
+// NEW: PowerUp class
+class PowerUp {
+  constructor(boundsWidth, boundsHeight) {
+    this.size = Config.powerup.size;
+    this.boundsWidth = boundsWidth;
+    this.boundsHeight = boundsHeight;
+    this.position = new Vector2();
+    this.active = false;
+  }
+  
+  spawn() {
+    // Random position, avoiding edges
+    const margin = 100;
+    this.position.x = margin + Math.random() * (this.boundsWidth - 2 * margin);
+    this.position.y = margin + Math.random() * (this.boundsHeight - 2 * margin);
+    this.active = true;
+  }
+  
+  checkCollision(ball) {
+    if (!this.active) return false;
+    
+    const dx = ball.position.x - this.position.x;
+    const dy = ball.position.y - this.position.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    return distance < (ball.radius + this.size / 2);
+  }
+  
+  deactivate() {
+    this.active = false;
+  }
+  
+  rect() {
+    return {
+      x: this.position.x - this.size / 2,
+      y: this.position.y - this.size / 2,
+      w: this.size,
+      h: this.size
+    };
   }
 }
 
@@ -230,6 +303,10 @@ class Game {
     this.paddleRight = new Paddle(Config.canvas.width - width, (Config.canvas.height - height) / 2, width, height, speed, Config.canvas.height);
     this.ball = new Ball(Config.ball.radius, Config.canvas.width, Config.canvas.height);
 
+    // NEW: Power-up system
+    this.powerup = new PowerUp(Config.canvas.width, Config.canvas.height);
+    this.powerupTimer = null;
+
     // Rules/state
     this.scores = { p1: 0, p2: 0 };
     this.gameOver = false;
@@ -280,6 +357,11 @@ class Game {
     if (this.gameOver) return;
     this.ball.update();
 
+    // NEW: Check power-up collision
+    if (this.powerup.checkCollision(this.ball)) {
+      this.activatePowerup();
+    }
+
     // Paddle collisions with ball
     const hitLeft = this.ball.position.x - this.ball.radius < this.paddleLeft.width &&
       this.ball.position.y > this.paddleLeft.position.y &&
@@ -304,17 +386,53 @@ class Game {
     // Scoring
     if (this.ball.position.x - this.ball.radius < 0) {
       this.scores.p2++;
-      this.checkWin() || this.ball.reset();
+      this.checkWin() || this.handleScore();
     } else if (this.ball.position.x + this.ball.radius > Config.canvas.width) {
       this.scores.p1++;
-      this.checkWin() || this.ball.reset();
+      this.checkWin() || this.handleScore();
     }
+  }
+
+  // NEW: Handle scoring and potential power-up spawn
+  handleScore() {
+    this.ball.reset();
+    // Random chance to spawn power-up
+    if (Math.random() < Config.powerup.spawnChance) {
+      this.powerup.spawn();
+    }
+  }
+
+  // NEW: Activate power-up effect
+  activatePowerup() {
+    this.powerup.deactivate();
+    
+    // Clear existing timer if any
+    if (this.powerupTimer) {
+      clearTimeout(this.powerupTimer);
+    }
+    
+    // Apply size increase to both paddles
+    this.paddleLeft.applyPowerup(Config.powerup.paddleSizeMultiplier);
+    this.paddleRight.applyPowerup(Config.powerup.paddleSizeMultiplier);
+    
+    // Set timer to revert after duration
+    this.powerupTimer = setTimeout(() => {
+      this.paddleLeft.resetSize();
+      this.paddleRight.resetSize();
+      this.powerupTimer = null;
+    }, Config.powerup.duration);
   }
 
   checkWin() {
     if (this.scores.p1 >= Config.rules.winningScore || this.scores.p2 >= Config.rules.winningScore) {
       this.gameOver = true;
       this.restartBtn.style.display = "inline-block";
+      // NEW: Deactivate power-up on game over
+      this.powerup.deactivate();
+      if (this.powerupTimer) {
+        clearTimeout(this.powerupTimer);
+        this.powerupTimer = null;
+      }
       return true;
     }
     return false;
@@ -335,6 +453,11 @@ class Game {
     this.renderer.rect(this.paddleRight.rect());
     this.renderer.circle(this.ball);
     
+    // NEW: Draw power-up if active
+    if (this.powerup.active) {
+      this.renderer.rect(this.powerup.rect(), Config.powerup.color);
+    }
+    
     // Draw scores
     this.renderer.text(this.scores.p1, Config.canvas.width / 4, 50);
     this.renderer.text(this.scores.p2, 3 * Config.canvas.width / 4, 50);
@@ -351,6 +474,15 @@ class Game {
     this.scores.p2 = 0;
     this.paddleLeft.position.y = (Config.canvas.height - this.paddleLeft.height) / 2;
     this.paddleRight.position.y = (Config.canvas.height - this.paddleRight.height) / 2;
+    // NEW: Reset paddle sizes
+    this.paddleLeft.resetSize();
+    this.paddleRight.resetSize();
+    // NEW: Clear power-up
+    this.powerup.deactivate();
+    if (this.powerupTimer) {
+      clearTimeout(this.powerupTimer);
+      this.powerupTimer = null;
+    }
     this.ball.reset(true);
     this.gameOver = false;
     this.restartBtn.style.display = "none";
@@ -391,5 +523,27 @@ difficultyButtons.forEach(btn => {
 
 game.loop();
   </script>
+
+  <!-- Footer Section with Student Challenges -->
+  <div style="max-width: 800px; margin: 30px auto; padding: 20px; background: #333; border-radius: 8px; color: #ddd;">
+    <h3 style="color: #4caf50; margin-top: 0;">🎯 Student Challenges (TODO Checklist)</h3>
+    <ol style="line-height: 1.8;">
+      <li><strong>Make it YOUR game:</strong> Change colors in Config.visuals, dimensions/speeds in Config.</li>
+      <li><strong>Center line + score SFX:</strong> Draw a dashed midline; play an audio on score.</li>
+      <li><strong>Power-ups:</strong> Occasionally spawn a small rectangle; when ball hits it, apply effect (bigger paddle? faster ball?).</li>
+      <li><strong>Pause/Resume:</strong> Map a key to toggle pause state in Game and skip updates when paused.</li>
+      <li><strong>Win screen polish:</strong> Show a replay countdown, then auto-restart.</li>
+      <li><strong>Advanced AI:</strong> Make the AI predict where the ball will land instead of just tracking it.</li>
+    </ol>
+    
+    <h3 style="color: #4caf50; margin-top: 25px;">📝 Notes</h3>
+    <p>This refactored version uses Object-Oriented Programming to make the game easy to modify and extend. Teachers: Encourage students to experiment with the Config values and complete the challenges above!</p>
+    
+    <p style="margin-top: 15px;"><strong>Controls:</strong></p>
+    <ul style="line-height: 1.8;">
+      <li>Player 1: W (up) / S (down)</li>
+      <li>Player 2: AI controlled (adjustable difficulty)</li>
+    </ul>
+  </div>
 </body>
 </html>

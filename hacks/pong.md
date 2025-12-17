@@ -513,27 +513,3 @@ difficultyButtons.forEach(btn => {
 
 game.loop();
   </script>
-
-  <!-- Footer Section with Student Challenges -->
-  <div style="max-width: 800px; margin: 30px auto; padding: 20px; background: #333; border-radius: 8px; color: #ddd;">
-    <h3 style="color: #4caf50; margin-top: 0;">🎯 Student Challenges (TODO Checklist)</h3>
-    <ol style="line-height: 1.8;">
-      <li><strong>Make it YOUR game:</strong> Change colors in Config.visuals, dimensions/speeds in Config.</li>
-      <li><strong>Center line + score SFX:</strong> Draw a dashed midline; play an audio on score.</li>
-      <li><strong>Power-ups:</strong> Occasionally spawn a small rectangle; when ball hits it, apply effect (bigger paddle? faster ball?).</li>
-      <li><strong>Pause/Resume:</strong> Map a key to toggle pause state in Game and skip updates when paused.</li>
-      <li><strong>Win screen polish:</strong> Show a replay countdown, then auto-restart.</li>
-      <li><strong>Advanced AI:</strong> Make the AI predict where the ball will land instead of just tracking it.</li>
-    </ol>
-    
-    <h3 style="color: #4caf50; margin-top: 25px;">📝 Notes</h3>
-    <p>This refactored version uses Object-Oriented Programming to make the game easy to modify and extend. Teachers: Encourage students to experiment with the Config values and complete the challenges above!</p>
-    
-    <p style="margin-top: 15px;"><strong>Controls:</strong></p>
-    <ul style="line-height: 1.8;">
-      <li>Player 1: W (up) / S (down)</li>
-      <li>Player 2: AI controlled (adjustable difficulty)</li>
-    </ul>
-  </div>
-</body>
-</html>

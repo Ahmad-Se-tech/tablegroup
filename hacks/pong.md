@@ -188,25 +188,25 @@ handleInput() {
     // If P1 scores > 1, slow down P1 and slightly speed up P2
     if (this.scores.p1 > 1) {
         // Must use Config.paddle.speed as the base to prevent compounding small changes every frame
-        this.paddleLeft.speed = Config.paddle.speed * Math.pow(0.95, this.scores.p1);
-        this.paddleRight.speed = Config.paddle.speed * Math.pow(1.005, this.scores.p1);
+        this.paddleLeft.speed = this.speed * Math.pow(0.95, this.scores.p1);
+        this.paddleRight.speed = this.speed * Math.pow(1.005, this.scores.p1);
     } 
     
     // If P2 scores > 1, slow down P2 significantly (based on its current speed)
     if (this.scores.p2 > 1) {
-        this.paddleRight.speed = this.paddleRight.speed * Math.pow(0.85, this.scores.p2);
+        this.paddleRight.speed = this.speed * Math.pow(0.85, this.scores.p2);
     }
     // Note: The speed logic here runs every frame, which is inefficient but acceptable for now.
 
     // Player 2 Controls (Clean, Accurate AI Tracking) ---
     
     // Calculate the Y-coordinate of the center of the right paddle
-    let paddleCent = this.paddleRight.position.y + (this.paddleRight.height / 2);
+    let paddleCenter = this.paddleRight.position.y + (this.paddleRight.height / 2);
 
     // Compare the ball's center to the paddle's center
-    if (this.ball.position.y > paddleCent) {
+    if (this.ball.position.y > paddleCenter) {
        this.paddleRight.move(this.paddleRight.speed); // Move Down
-    }   else if (this.ball.position.y < paddleCent) {
+    }   else if (this.ball.position.y < paddleCenter) {
        this.paddleRight.move(-this.paddleRight.speed); // Move Up
     }
     

@@ -188,30 +188,41 @@ handleInput() {
     // If P1 scores > 1, slow down P1 and slightly speed up P2
     if (this.scores.p1 > 1) {
         // Must use Config.paddle.speed as the base to prevent compounding small changes every frame
-        this.paddleLeft.speed = this.speed * Math.pow(0.95, this.scores.p1);
-        this.paddleRight.speed = this.speed * Math.pow(1.005, this.scores.p1);
-    } 
-    
-    // If P2 scores > 1, slow down P2 significantly (based on its current speed)
-    if (this.scores.p2 > 1) {
-        this.paddleRight.speed = this.speed * Math.pow(0.85, this.scores.p2);
+        this.paddleLeft.speed = 7 * Math.pow(0.95, this.scores.p1);
     }
+    else {;}
+    
+    // P2 Speed Adjustment (Combined Logic)
+    if (this.scores.p2 > 1) {
+        // Condition 1: P2 is winning, slow down P2 significantly (0.85)
+        this.paddleRight.speed = 7 * Math.pow(0.95, this.scores.p2);
+    } 
+    else if (this.scores.p1 > 7) {
+        // Condition 2: P1 is winning, speed up P2 slightly (1.005)
+        this.paddleRight.speed = 7 * Math.pow(1.005, this.scores.p1);
+    } 
+    else {this.paddleRight.speed = 7}
     // Note: The speed logic here runs every frame, which is inefficient but acceptable for now.
 
     // Player 2 Controls (Clean, Accurate AI Tracking) ---
     
-    // Calculate the Y-coordinate of the center of the right paddle
-    let paddleCenter = this.paddleRight.position.y + (this.paddleRight.height / 2);
+   // Calculate the Y-coordinate of the center of the right paddle
+let paddleCenter = this.paddleRight.position.y + (this.paddleRight.height / 2);
 
-    // Compare the ball's center to the paddle's center
-    if (this.ball.position.y > paddleCenter) {
-       this.paddleRight.move(this.paddleRight.speed); // Move Down
-    }   else if (this.ball.position.y < paddleCenter) {
-       this.paddleRight.move(-this.paddleRight.speed); // Move Up
-    }
-    
-    // Removed the entirely broken logic block that was below the else if statement.
-    // Also removed the duplicate speed logic and the incorrect 'centerY' block.
+// Calculate the vertical difference (error)
+let error = this.ball.position.y - paddleCenter; 
+
+// --- Introduce the Dead Zone ---
+const DEAD_ZONE = Math.max(1, this.paddleRight.speed / 2);
+
+if (error > DEAD_ZONE) {
+   // Ball is below the dead zone, move Down
+   this.paddleRight.move(this.paddleRight.speed); 
+} else if (error < -DEAD_ZONE) {
+   // Ball is above the dead zone, move Up
+   this.paddleRight.move(-this.paddleRight.speed);
+}
+// If error is within +/- DEAD_ZONE, the paddle does nothing, stopping the jitter.
 }
 
 
@@ -259,18 +270,6 @@ handleInput() {
     }
     return false;
   }
-
-<audio id="WinSound" src="assets/audio/hehehehaha.mp3" preload="auto"></audio>
-// This variable should be accessible to your Game class
-const winAudioElement = document.getElementById('WinSound');
-
-function playWinSound() {
-    // 1. Reset the playback position to the start (in case it's still playing).
-    winAudioElement.currentTime = 0; 
-    
-    // 2. Play the sound!
-    winAudioElement.play(); 
-}
   draw() {
     this.renderer.clear(Config.canvas.width, Config.canvas.height);
     this.renderer.rect(this.paddleLeft.rect());
@@ -281,7 +280,6 @@ function playWinSound() {
     if (this.gameOver) {
       this.renderer.text("Game Over", Config.canvas.width / 2 - 80, Config.canvas.height / 2 - 20, Config.visuals.gameOver);
       const msg = this.scores.p1 >= Config.rules.winningScore ? "Player 1 Wins!" : "Player 2 Wins!";
-      document.getElementById('WinSound').play()
       this.renderer.text(msg, Config.canvas.width / 2 - 120, Config.canvas.height / 2 + 20, Config.visuals.win);
     }
   }
@@ -302,7 +300,12 @@ function playWinSound() {
     requestAnimationFrame(this.loop);
   }
 }
-
+  <div id="gamebutton"
+    style="background-color: #127492ff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
+         onmouseover="this.style.backgroundColor='#404b7a';" 
+         onmouseout="this.style.backgroundColor='#127492ff';">
+        Ping Pong
+  </div>
 // -------------------------------
 // Bootstrapping
 // -------------------------------
@@ -320,8 +323,6 @@ game.loop();
 // Student Challenges (inline TODO checklist)
 // -----------------------------------------
 // 1) Make it YOUR game: change colors in Config.visuals, dimensions/speeds in Config.
-// 2) Add AI: implement simple tracking for right paddle in handleInput (hint above).
-// 3) Rally speed-up: every time the ball hits a paddle, slightly increase |velocity.x|.
 // 4) Center line + score SFX: draw a dashed midline; play an audio on score.
 // 5) Power-ups: occasionally spawn a small rectangle; when ball hits it, apply effect (bigger paddle? faster ball?).
 // 6) Pause/Resume: map a key to toggle pause state in Game and skip updates when paused.

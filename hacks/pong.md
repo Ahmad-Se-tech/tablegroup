@@ -260,6 +260,17 @@ handleInput() {
     return false;
   }
 
+<audio id="WinSound" src="assets/audio/hehehehaha.mp3" preload="auto"></audio>
+// This variable should be accessible to your Game class
+const winAudioElement = document.getElementById('WinSound');
+
+function playWinSound() {
+    // 1. Reset the playback position to the start (in case it's still playing).
+    winAudioElement.currentTime = 0; 
+    
+    // 2. Play the sound!
+    winAudioElement.play(); 
+}
   draw() {
     this.renderer.clear(Config.canvas.width, Config.canvas.height);
     this.renderer.rect(this.paddleLeft.rect());
@@ -270,6 +281,7 @@ handleInput() {
     if (this.gameOver) {
       this.renderer.text("Game Over", Config.canvas.width / 2 - 80, Config.canvas.height / 2 - 20, Config.visuals.gameOver);
       const msg = this.scores.p1 >= Config.rules.winningScore ? "Player 1 Wins!" : "Player 2 Wins!";
+      document.getElementById('WinSound').play()
       this.renderer.text(msg, Config.canvas.width / 2 - 120, Config.canvas.height / 2 + 20, Config.visuals.win);
     }
   }

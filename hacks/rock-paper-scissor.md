@@ -318,10 +318,11 @@ function playSimpleSound(filePath) {
       (playerChoice==="rock" && computerChoice==="scissors") ||
       (playerChoice==="paper" && computerChoice==="rock") ||
       (playerChoice==="scissors" && computerChoice==="paper")
-    ){
-      resultText = "You Win!";
-      winner = playerChoice; loser = computerChoice; playSimpleSound('hehehehaha.mp3');
-    } else {
+    )
+      {resultText = "You Win!";
+      winner = playerChoice; loser = computerChoice; 
+        playSimpleSound('/hehehehaha.mp3');}
+     else {
       resultText = "You Lose!";
       winner = computerChoice; loser = playerChoice;
 

@@ -276,27 +276,6 @@ permalink: /rock-paper-scissor/
   render(); // kick off the engine once
 
 
-/**
- * Plays an audio file once using the built-in Audio object.
- *
- * @param {string} filePath - The path to the audio file (e.g., 'sounds/win.mp3').
- */
-function playSimpleSound(filePath) { 
-    try {
-        const audio = new Audio(filePath); 
-        
-        audio.currentTime = 0; 
-        audio.play()
-            .catch(error => {
-                console.warn(`Browser blocked audio play for: ${filePath}`, error);
-            });
-    } catch (e) {
-        console.error("Error creating audio object:", e);
-    }
-}
-// ---------------------------------------------
-// Call the function later with the actual string:
-// playSimpleSound('/assets/audio/hehehehaha.mp3');
 
 
   // --- game logic + console entry point ---
@@ -318,10 +297,10 @@ function playSimpleSound(filePath) {
       (playerChoice==="rock" && computerChoice==="scissors") ||
       (playerChoice==="paper" && computerChoice==="rock") ||
       (playerChoice==="scissors" && computerChoice==="paper")
-    ){
-      resultText = "You Win!";
-      winner = playerChoice; loser = computerChoice; playSimpleSound('hehehehaha.mp3');
-    } else {
+    )
+      {resultText = "You Win!";
+      winner = playerChoice; loser = computerChoice;}
+     else {
       resultText = "You Lose!";
       winner = computerChoice; loser = playerChoice;
 

@@ -91,16 +91,7 @@ comments: True
   </style>
 </head>
 <body>
-  <!-- Header Section -->
-  <div style="text-align: center; margin-bottom: 10px;">
-    <h1 style="margin-bottom: 5px;">🏓 Complete Pong Game Code Implementation</h1>
-    <p style="color: #aaa; margin: 5px 0;">Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game</p>
-    <p style="color: #888; font-size: 14px; margin: 5px 0;">
-      <strong>Categories:</strong> Game Development | JavaScript | Canvas API | Code Implementation
-    </p>
-  </div>
-
-  <h2 style="text-align: center; margin: 20px 0;">🎮 Pong Game Demo</h2>
+  <h1>🏓 Pong Game</h1>
   
   <div class="controls">
     <span class="difficulty-label">Difficulty:</span>

@@ -14,8 +14,7 @@ comments: True
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🏓 Complete Pong Game Code Implementation</title>
-  <meta name="description" content="Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game with difficulty settings">
+
   <style>
     body {
       margin: 0;

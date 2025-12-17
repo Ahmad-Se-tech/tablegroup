@@ -1,53 +1,104 @@
----
-layout: post
-title: 🏓 Complete Pong Game Code Implementation
-description: Complete HTML, CSS, and JavaScript code for building a fully functional 2-player Pong game
-categories: ['Game Development', 'JavaScript', 'Canvas API', 'Code Implementation']
-permalink: /custompong
-menu: nav/tools_setup.html
-toc: True
-comments: True
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pong Game with Difficulty</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #222;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+    
+    .game-canvas-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    #pongCanvas {
+      border: 10px solid #fff;
+      background: #1e00ffff;
+      display: block;
+      margin: 0 auto;
+    }
+    
+    .controls {
+      margin: 20px 0;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .difficulty-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: 2px solid #fff;
+      border-radius: 6px;
+      background: #444;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .difficulty-btn:hover {
+      background: #666;
+      transform: scale(1.05);
+    }
+    
+    .difficulty-btn.active {
+      background: #4caf50;
+      border-color: #4caf50;
+    }
+    
+    #restartBtn {
+      display: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
+      background: #4caf50;
+      color: white;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    
+    #restartBtn:hover {
+      background: #45a049;
+    }
+    
+    .difficulty-label {
+      font-size: 18px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏓 Pong Game</h1>
+  
+  <div class="controls">
+    <span class="difficulty-label">Difficulty:</span>
+    <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+    <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+    <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+  </div>
+  
+  <div class="game-canvas-container">
+    <canvas id="pongCanvas" width="800" height="500"></canvas>
+    <br>
+    <button id="restartBtn">Restart Game</button>
+  </div>
 
-## 🎮 Pong Game Demo
-
-<div class="game-canvas-container" style="text-align:center;">
-  <canvas id="pongCanvas" width="800" height="500"></canvas>
-  <br>
-  <button id="restartBtn">Restart Game</button>
-</div>
-
-<style>
-  .game-canvas-container {
-    margin-top: 20px;
-  }
-  #pongCanvas {
-    border: 10px solid #fff;
-    background: #1e00ffff;
-  }
-
-  #restartBtn {
-    display: none;
-    margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 18px;
-    border: none;
-    border-radius: 6px;
-    background: #4caf50;
-    color: white;
-    cursor: pointer;
-  }
-  #restartBtn:hover {
-    background: #45a049;
-  }
-</style>
-
-<script>
+  <script>
 // =============================
-// Pong (Object-Oriented Version)
+// Pong with Difficulty Settings
 // =============================
-// This refactor makes the game easy to modify and includes student TODOs.
-// Teachers: Encourage students to change the Config values and complete TODOs.
 
 // -----------------------------
 // Config: Tweak these values
@@ -58,11 +109,16 @@ const Config = {
   ball: { radius: 10, baseSpeedX: 5, maxRandomY: 2, spinFactor: 0.3 },
   rules: { winningScore: 10 },
   keys: {
-    // TODO[Students]: Remap keys if desired
     p1Up: "w", p1Down: "s",
     p2Up: "i", p2Down: "k"
   },
-  visuals: { bg: "#1e00ffff", fg: "#fff", text: "#fff", gameOver: "red", win: "yellow" }
+  visuals: { bg: "#1e00ffff", fg: "#fff", text: "#fff", gameOver: "red", win: "yellow" },
+  // NEW: Difficulty settings
+  difficulty: {
+    easy: { speedMultiplier: 0.6, deadZone: 15 },
+    medium: { speedMultiplier: 1.0, deadZone: 8 },
+    hard: { speedMultiplier: 1.5, deadZone: 3 }
+  }
 };
 
 // Basic vector helper for clarity
@@ -76,6 +132,7 @@ class Paddle {
     this.width = width;
     this.height = height;
     this.speed = speed;
+    this.baseSpeed = speed; // Store original speed
     this.boundsHeight = boundsHeight;
   }
   move(dy) {
@@ -168,61 +225,45 @@ class Game {
     this.restartBtn = restartBtn;
     this.restartBtn.addEventListener("click", () => this.restart());
 
+    // NEW: Difficulty setting
+    this.currentDifficulty = 'easy';
+    this.updateAIDifficulty();
+
     this.loop = this.loop.bind(this);
   }
 
-  // -------------------------------
-  // TODO[Students]: Add an AI player
-  // Replace the right paddle control with simple AI:
-  // if (this.ball.position.y > centerY) move down else move up.
-  // Try making difficulty adjustable with a speed multiplier.
-  // -------------------------------
+  // NEW: Method to update AI difficulty
+  setDifficulty(difficulty) {
+    this.currentDifficulty = difficulty;
+    this.updateAIDifficulty();
+  }
 
-handleInput() {
+  updateAIDifficulty() {
+    const settings = Config.difficulty[this.currentDifficulty];
+    this.aiSpeedMultiplier = settings.speedMultiplier;
+    this.aiDeadZone = settings.deadZone;
+  }
+
+  handleInput() {
     if (this.gameOver) return;
 
-    // --- 1. Player 1 Controls (Human) ---
+    // Player 1 Controls (Human)
     if (this.input.isDown(Config.keys.p1Up)) this.paddleLeft.move(-this.paddleLeft.speed);
     if (this.input.isDown(Config.keys.p1Down)) this.paddleLeft.move(this.paddleLeft.speed);
 
-    // --- 2. Dynamic Speed Adjustment Logic (Combined and Corrected Syntax) ---    
-    // P2 Speed Adjustment (Combined Logic)
-    if (this.scores.p2 > this.scores.p1) {
-        // Condition 1: P2 is winning, slow down P2 significantly (0.85)
-        this.paddleRight.speed = 10 * Math.pow(0.5, this.scores.p2);
-    } 
-    else if (this.scores.p1 > this.scores.p2) {
-        // Condition 2: P1 is winning, speed up P2 slightly (1.005)
-        this.paddleRight.speed = 10 * Math.pow(2, this.scores.p1);
-    } 
-    else {this.paddleRight.speed = 10}
-    
-    if(this.paddleLeft.speed < 1) {this.paddleLeft.speed = 3}
-    else {;}
-    // Note: The speed logic here runs every frame, which is inefficient but acceptable for now.
+    // AI Controls for Player 2 with difficulty adjustment
+    let paddleCenter = this.paddleRight.position.y + (this.paddleRight.height / 2);
+    let error = this.ball.position.y - paddleCenter;
 
-    // Player 2 Controls (Clean, Accurate AI Tracking) ---
-    
-   // Calculate the Y-coordinate of the center of the right paddle
-let paddleCenter = this.paddleRight.position.y + (this.paddleRight.height / 2);
+    // Apply difficulty-based speed
+    const aiSpeed = this.paddleRight.baseSpeed * this.aiSpeedMultiplier;
 
-// Calculate the vertical difference (error)
-let error = this.ball.position.y - paddleCenter; 
-
-// --- Introduce the Dead Zone ---
-const DEAD_ZONE = Math.max(1, this.paddleRight.speed / 2);
-
-if (error > DEAD_ZONE) {
-   // Ball is below the dead zone, move Down
-   this.paddleRight.move(this.paddleRight.speed); 
-} else if (error < -DEAD_ZONE) {
-   // Ball is above the dead zone, move Up
-   this.paddleRight.move(-this.paddleRight.speed);
-}
-// If error is within +/- DEAD_ZONE, the paddle does nothing, stopping the jitter.
-}
-
-
+    if (error > this.aiDeadZone) {
+      this.paddleRight.move(aiSpeed);
+    } else if (error < -this.aiDeadZone) {
+      this.paddleRight.move(-aiSpeed);
+    }
+  }
 
   update() {
     if (this.gameOver) return;
@@ -236,7 +277,7 @@ if (error > DEAD_ZONE) {
     if (hitLeft) {
       this.ball.velocity.x *= -1;
       const delta = this.ball.position.y - (this.paddleLeft.position.y + this.paddleLeft.height / 2);
-      this.ball.velocity.y = delta * Config.ball.spinFactor; // "spin"
+      this.ball.velocity.y = delta * Config.ball.spinFactor;
     }
 
     const hitRight = this.ball.position.x + this.ball.radius > (Config.canvas.width - this.paddleRight.width) &&
@@ -267,31 +308,23 @@ if (error > DEAD_ZONE) {
     }
     return false;
   }
- draw() {
 
-    // 1. CLEAR THE CANVAS FIRST!
-    // This wipes the canvas clean (usually fills it with the background color)
-    this.renderer.clear(Config.canvas.width, Config.canvas.height); 
+  draw() {
+    // Clear canvas
+    this.renderer.clear(Config.canvas.width, Config.canvas.height);
     
-    // 2. DRAW THE CENTER STRIPE (New Position)
-    // Set the fill color to white
+    // Draw center stripe
     this.ctx.fillStyle = 'white';
+    const stripeWidth = 5;
+    const stripeX = (this.canvas.width / 2) - (stripeWidth / 2);
+    this.ctx.fillRect(stripeX, 0, stripeWidth, this.canvas.height);
 
-    // Define the stripe properties
-    const stripeWidth = 5; 
-    const stripeX = (this.canvas.width / 2) - (stripeWidth / 2); 
-    const stripeY = 0; 
-    const stripeHeight = this.canvas.height; 
-
-    // Draw the stripe as a filled rectangle
-    this.ctx.fillRect(stripeX, stripeY, stripeWidth, stripeHeight);
-
-    // 3. DRAW ALL GAME ELEMENTS ON TOP OF THE STRIPE
+    // Draw game elements
     this.renderer.rect(this.paddleLeft.rect());
     this.renderer.rect(this.paddleRight.rect());
     this.renderer.circle(this.ball);
     
-    // Draw scores and Game Over message last
+    // Draw scores
     this.renderer.text(this.scores.p1, Config.canvas.width / 4, 50);
     this.renderer.text(this.scores.p2, 3 * Config.canvas.width / 4, 50);
     
@@ -300,10 +333,11 @@ if (error > DEAD_ZONE) {
       const msg = this.scores.p1 >= Config.rules.winningScore ? "Player 1 Wins!" : "Player 2 Wins!";
       this.renderer.text(msg, Config.canvas.width / 2 - 120, Config.canvas.height / 2 + 20, Config.visuals.win);
     }
-}
+  }
 
   restart() {
-    this.scores.p1 = 0; this.scores.p2 = 0;
+    this.scores.p1 = 0;
+    this.scores.p2 = 0;
     this.paddleLeft.position.y = (Config.canvas.height - this.paddleLeft.height) / 2;
     this.paddleRight.position.y = (Config.canvas.height - this.paddleRight.height) / 2;
     this.ball.reset(true);
@@ -319,28 +353,32 @@ if (error > DEAD_ZONE) {
   }
 }
 
-
-
-
 // -------------------------------
 // Bootstrapping
 // -------------------------------
 const canvas = document.getElementById('pongCanvas');
 const restartBtn = document.getElementById('restartBtn');
 
-// Ensure canvas matches Config every load (keeps HTML in sync)
 canvas.width = Config.canvas.width;
 canvas.height = Config.canvas.height;
 
 const game = new Game(canvas, restartBtn);
-game.loop();
 
-// -----------------------------------------
-// Student Challenges (inline TODO checklist)
-// -----------------------------------------
-// 1) Make it YOUR game: change colors in Config.visuals, dimensions/speeds in Config.
-// 4) Center line + score SFX: draw a dashed midline; play an audio on score.
-// 5) Power-ups: occasionally spawn a small rectangle; when ball hits it, apply effect (bigger paddle? faster ball?).
-// 6) Pause/Resume: map a key to toggle pause state in Game and skip updates when paused.
-// 7) Win screen polish: show a replay countdown, then auto-restart.
-</script>
+// NEW: Difficulty button handlers
+const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+difficultyButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Remove active class from all buttons
+    difficultyButtons.forEach(b => b.classList.remove('active'));
+    // Add active class to clicked button
+    btn.classList.add('active');
+    // Update game difficulty
+    const difficulty = btn.dataset.difficulty;
+    game.setDifficulty(difficulty);
+  });
+});
+
+game.loop();
+  </script>
+</body>
+</html>

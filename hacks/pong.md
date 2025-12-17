@@ -179,25 +179,34 @@ class Game {
 
   handleInput() {
     if (this.gameOver) return;
-    // Player 1 controls
+// Player 1 controls
     if (this.input.isDown(Config.keys.p1Up)) this.paddleLeft.move(-this.paddleLeft.speed);
     if (this.input.isDown(Config.keys.p1Down)) this.paddleLeft.move(this.paddleLeft.speed);
-    // Player 2 controls (human). Swap to AI per TODO above.
+// Player 1 controls that slow down the paddle if the score is over 1(player wins by any amount)
+    if (this.scores.p1 > 1) {this.paddleLeft.speed = this.paddleLeft.speed * Math.pow(0.95, this.scores.p1); this.paddleRight.speed = this.paddleRight.speed * Math.pow(1.005, this.scores.p1)} else {;}
+// Player 2 controls (human). Swap to AI per TODO above.
     let centerY = Config.canvas.height / 2;
     if (this.ball.position.y > centerY) {this.paddleRight.move(this.paddleRight.speed * 4)}
     else {this.paddleRight.move(-this.paddleRight.speed * 4);}
-    // Calculate the center of the paddle 
-let paddleCenterY = this.paddleRight.position.y + (this.paddleRight.height / 2);
+    if (this.scores.p2 > 1) {this.paddleRight.speed = this.paddleRight.speed * Math.pow(0.85, this.scores.p2)} else {;}
+// Calculate the center of the paddle 
+let paddleCent = this.paddleRight.position.y + (this.paddleRight.height / 2);
+
 // Compare the ball's center to the paddle's center
-if (this.ball.position.y > paddleCenterY) {
+if (this.ball.position.y > paddleCent) {
     this.paddleRight.move(this.paddleRight.speed); // Move Down
-}   else if (this.ball.position.y < paddleCenterY) {
-    this.paddle.centerY = Config.canvas.height / 2;
+}   else if (this.ball.position.y < paddleCent) {
+    this.paddleCent = Config.canvas.height / 2;
     if (this.ball.position.y > centerY) {this.paddleRight.move(this.paddleRight.speed)}
-    else {this.paddleRight.move(-this.paddleRight.speed);}
-paddleRight.move(-this.paddleRight.speed); // Move Up
 }
   }
+  <canvas id="DifficultyButtons" width="800" height="500"></canvas>
+
+<div id="difficulty-settings">
+    <button id="easyBtn">Easy</button>
+    <button id="normalBtn">Normal</button>
+    <button id="hardBtn">Hard</button>
+</div>
 
   update() {
     if (this.gameOver) return;
@@ -291,7 +300,7 @@ game.loop();
 // Student Challenges (inline TODO checklist)
 // -----------------------------------------
 // 1) Make it YOUR game: change colors in Config.visuals, dimensions/speeds in Config.
-// 2) Add AI: implement simple tracking for right paddle in handleInput (hint above).
+// 2) Add AI: implement simple tracking for right paddle in handleInput (hint above). Done
 // 3) Rally speed-up: every time the ball hits a paddle, slightly increase |velocity.x|.
 // 4) Center line + score SFX: draw a dashed midline; play an audio on score.
 // 5) Power-ups: occasionally spawn a small rectangle; when ball hits it, apply effect (bigger paddle? faster ball?).

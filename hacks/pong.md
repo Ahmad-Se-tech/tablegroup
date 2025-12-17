@@ -22,8 +22,8 @@ comments: True
     margin-top: 20px;
   }
   #pongCanvas {
-    border: 2px solid #fff;
-    background: #000;
+    border: 10px solid #fff;
+    background: #1e00ffff;
   }
   #restartBtn {
     display: none;
@@ -61,7 +61,7 @@ const Config = {
     p1Up: "w", p1Down: "s",
     p2Up: "i", p2Down: "k"
   },
-  visuals: { bg: "#000", fg: "#fff", text: "#fff", gameOver: "red", win: "yellow" }
+  visuals: { bg: "#1e00ffff", fg: "#fff", text: "#fff", gameOver: "red", win: "yellow" }
 };
 
 // Basic vector helper for clarity
@@ -270,19 +270,40 @@ if (error > DEAD_ZONE) {
     }
     return false;
   }
-  draw() {
-    this.renderer.clear(Config.canvas.width, Config.canvas.height);
+ draw() {
+
+    // 1. CLEAR THE CANVAS FIRST!
+    // This wipes the canvas clean (usually fills it with the background color)
+    this.renderer.clear(Config.canvas.width, Config.canvas.height); 
+    
+    // 2. DRAW THE CENTER STRIPE (New Position)
+    // Set the fill color to white
+    this.ctx.fillStyle = 'white';
+
+    // Define the stripe properties
+    const stripeWidth = 5; 
+    const stripeX = (this.canvas.width / 2) - (stripeWidth / 2); 
+    const stripeY = 0; 
+    const stripeHeight = this.canvas.height; 
+
+    // Draw the stripe as a filled rectangle
+    this.ctx.fillRect(stripeX, stripeY, stripeWidth, stripeHeight);
+
+    // 3. DRAW ALL GAME ELEMENTS ON TOP OF THE STRIPE
     this.renderer.rect(this.paddleLeft.rect());
     this.renderer.rect(this.paddleRight.rect());
     this.renderer.circle(this.ball);
+    
+    // Draw scores and Game Over message last
     this.renderer.text(this.scores.p1, Config.canvas.width / 4, 50);
     this.renderer.text(this.scores.p2, 3 * Config.canvas.width / 4, 50);
+    
     if (this.gameOver) {
       this.renderer.text("Game Over", Config.canvas.width / 2 - 80, Config.canvas.height / 2 - 20, Config.visuals.gameOver);
       const msg = this.scores.p1 >= Config.rules.winningScore ? "Player 1 Wins!" : "Player 2 Wins!";
       this.renderer.text(msg, Config.canvas.width / 2 - 120, Config.canvas.height / 2 + 20, Config.visuals.win);
     }
-  }
+}
 
   restart() {
     this.scores.p1 = 0; this.scores.p2 = 0;
@@ -300,12 +321,10 @@ if (error > DEAD_ZONE) {
     requestAnimationFrame(this.loop);
   }
 }
-  <div id="gamebutton"
-    style="background-color: #127492ff; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: 0.3s; text-align: center; cursor: pointer;"
-         onmouseover="this.style.backgroundColor='#404b7a';" 
-         onmouseout="this.style.backgroundColor='#127492ff';">
-        Ping Pong
-  </div>
+
+
+
+
 // -------------------------------
 // Bootstrapping
 // -------------------------------
